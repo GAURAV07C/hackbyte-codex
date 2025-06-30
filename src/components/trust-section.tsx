@@ -26,7 +26,7 @@ export function TrustSection() {
             Why Industry Leaders Choose Us
           </h2>
           <p className="text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
-            The world's most successful professionals trust SkillSphere for
+            The world&apos;s most successful professionals trust SkillSphere for
             their continued growth and development
           </p>
         </div>
