@@ -7,11 +7,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Calendar, Clock, Users, Play } from "lucide-react";
 import { webinarData } from "@/data/webinar-data";
 import { motion } from "framer-motion";
-import { useAuth } from "@/lib/auth-context";
 import { SignupDialog } from "./auth/signup-dialog";
 
 export function WebinarsSection() {
-  const { user } = useAuth();
+
+  const user: never[] = []
 
   const containerVariants = {
     hidden: { opacity: 0 },

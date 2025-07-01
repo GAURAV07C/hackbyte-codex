@@ -5,11 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Play, ArrowRight, Calendar, Clock, Users } from "lucide-react";
 import { motion } from "framer-motion";
-import { useAuth } from "@/lib/auth-context";
+// import { useAuth } from "@/lib/auth-context";
 import { SignupDialog } from "./auth/signup-dialog";
 
 export function HeroSection() {
-  const { user } = useAuth();
+  // const { user } = useAuth();
+
+  const user: never[] = [];
 
   const containerVariants = {
     hidden: { opacity: 0 },

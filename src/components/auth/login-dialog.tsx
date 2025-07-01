@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useAuth } from "@/lib/auth-context"
 import { motion } from "framer-motion"
 import { Loader2, Mail, Lock } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
@@ -27,13 +26,14 @@ export function LoginDialog({ children }: LoginDialogProps) {
   const [open, setOpen] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const { login, isLoading } = useAuth()
   const { toast } = useToast()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
+    setIsLoading(true)
     const success = await login(email, password)
+    setIsLoading(false)
 
     if (success) {
       toast({
@@ -116,3 +116,9 @@ export function LoginDialog({ children }: LoginDialogProps) {
     </Dialog>
   )
 }
+async function login(email: string, password: string): Promise<boolean> {
+  // TODO: Replace with real authentication logic
+  // For now, simulate a successful login if email and password are not empty
+  return email.length > 0 && password.length > 0;
+}
+

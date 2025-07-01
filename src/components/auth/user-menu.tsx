@@ -10,11 +10,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useAuth } from "@/lib/auth-context"
 import { User, Settings, BookOpen, LogOut, Calendar } from "lucide-react"
 
 export function UserMenu() {
-  const { user, logout } = useAuth()
+
+  // Example user object; replace with actual user data from your auth logic
+  const user = {
+    name: "John Doe",
+    email: "john.doe@example.com",
+    avatar: ""
+  }
 
   if (!user) return null
 
@@ -53,7 +58,13 @@ export function UserMenu() {
           <span>Settings</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator className="bg-gray-700" />
-        <DropdownMenuItem className="text-gray-300 hover:text-white hover:bg-gray-800 cursor-pointer" onClick={logout}>
+        <DropdownMenuItem
+          className="text-gray-300 hover:text-white hover:bg-gray-800 cursor-pointer"
+          onClick={() => {
+            // TODO: Replace with your actual logout logic
+            console.log("Logging out...");
+          }}
+        >
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
         </DropdownMenuItem>

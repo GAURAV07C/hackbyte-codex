@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, Users, Bell } from "lucide-react";
 import { siteData } from "@/data/site-data";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "@/lib/auth-context";
+// import { useAuth } from "@/lib/auth-context";
 import { LoginDialog } from "./auth/login-dialog";
 import { SignupDialog } from "./auth/signup-dialog";
 import { UserMenu } from "./auth/user-menu";
@@ -15,7 +15,10 @@ import { Badge } from "@/components/ui/badge";
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  // For demo purposes, set user to null or a mock object:
+  // const user = { name: "John Doe" }; // Uncomment for testing authenticated state
+  const user: { name: string } | null = null;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -126,7 +129,7 @@ export function Navbar() {
                 className="flex items-center space-x-3"
               >
                 <span className="text-sm text-gray-300 hidden xl:block">
-                  Welcome, {user.name}
+                  Welcome, {(user as { name: string }).name}
                 </span>
                 <UserMenu />
               </motion.div>
@@ -218,7 +221,7 @@ export function Navbar() {
                   {user ? (
                     <div className="flex items-center justify-between">
                       <span className="text-gray-300">
-                        Welcome, {user.name}
+                        Welcome, {(user as { name: string }).name}
                       </span>
                       <UserMenu />
                     </div>
