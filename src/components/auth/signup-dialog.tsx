@@ -1,149 +1,247 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { RegisterSchema } from "@/schemas/AuthSchema";
+import { useRegister } from "@/lib/queries/auth";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+import FormError from "@/components/form-error";
+import FormSucess from "@/components/form-sucess";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-// import { useAuth } from "@/lib/auth-context"
-import { motion } from "framer-motion"
-import { Loader2, Mail, Lock, User } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+
+import { motion } from "framer-motion";
+import { Loader2, Mail, Lock, User } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import CardWrapper from "./card-wrapper";
 
 interface SignupDialogProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export function SignupDialog({ children }: SignupDialogProps) {
-  const [open, setOpen] = useState(false)
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  
-  const { toast } = useToast()
-  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | undefined>("");
+  const [sucess, setSucess] = useState<string | boolean | undefined>("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+  const { mutate, isPending } = useRegister();
 
-    const success = await signup(name, email, password)
+  const [open, setOpen] = useState(false);
+  const { toast } = useToast();
 
-    setIsLoading(false)
+  const form = useForm<z.infer<typeof RegisterSchema>>({
+    resolver: zodResolver(RegisterSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      name: "",
+      confirm_password: "",
+    },
+  });
 
-    if (success) {
-      toast({
-        title: "Account created!",
-        description: "Welcome to SkillSphere. You're now logged in.",
-      })
-      setOpen(false)
-      setName("")
-      setEmail("")
-      setPassword("")
-    } else {
-      toast({
-        title: "Signup failed",
-        description: "Please check your information and try again.",
-        variant: "destructive",
-      })
-    }
-  }
+  const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
+    mutate(values, {
+      onSuccess: (data) => {
+        if (data.success) {
+          setSucess(data.success);
+          toast({
+            title: "Confirmation email.sent",
+          });
+          form.reset();
+          setOpen(false);
+        } else {
+          toast({
+            title: "Signup failed",
+            description: data.message as string,
+            variant: "destructive",
+          });
+        }
+      },
+      onError: (error) => {
+        toast({
+          title: "Something went wrong",
+          description:
+            error instanceof z.ZodError
+              ? "Validation Error"
+              : "Please try again.",
+          variant: "destructive",
+        });
+        setError(error.message);
+      },
+    });
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px] bg-gray-900 border-gray-700">
-        <DialogHeader>
-          <DialogTitle className="text-white">Create Account</DialogTitle>
-          <DialogDescription className="text-gray-400">Join SkillSphere to access exclusive webinars</DialogDescription>
-        </DialogHeader>
-        <motion.form
-          onSubmit={handleSubmit}
-          className="space-y-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
+        <CardWrapper
+          headerLabel="Create an account "
+          backButtonLabel="Already have an account?"
+          backButtonHref="/auth/login"
+          showSocial
         >
-          <div className="space-y-2">
-            <Label htmlFor="name" className="text-white">
-              Full Name
-            </Label>
-            <div className="relative">
-              <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-              <Input
-                id="name"
-                type="text"
-                placeholder="Enter your full name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="pl-10 bg-gray-800 border-gray-600 text-white"
-                required
+          <DialogHeader>
+            <DialogDescription className="text-gray-400 font-medium text-sm">
+              Join <span className="text-[#1edaa5]"> HACKBYTE CODEX </span> to
+              access exclusive webinars
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...form}>
+            <motion.form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-4 py-5"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-white">Name</FormLabel>
+
+                      <FormControl>
+                        <div className="relative">
+                          <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                          <Input
+                            disabled={isPending}
+                            {...field}
+                            placeholder="Enter your full name"
+                            type="text"
+                            className="pl-10 bg-gray-800 border-gray-600 text-white"
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-white">Email</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                          <Input
+                            disabled={isPending}
+                            {...field}
+                            placeholder="Enter your email"
+                            type="email"
+                            className="pl-10 bg-gray-800 border-gray-600 text-white"
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-white">Password</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                          <Input
+                            {...field}
+                            disabled={isPending}
+                            placeholder="Create a password (min 6 characters)"
+                            className="pl-10 bg-gray-800 border-gray-600 text-white"
+                            type="password"
+                            minLength={6}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="confirm_password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-white">
+                        Confirm Password
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                          <Input
+                            {...field}
+                            disabled={isPending}
+                            placeholder="Enter confirm password"
+                            className="pl-10 bg-gray-800 border-gray-600 text-white"
+                            type="password"
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <FormError message={error} />
+              <FormSucess
+                message={
+                  typeof sucess === "string"
+                    ? sucess
+                    : sucess
+                    ? "Success"
+                    : undefined
+                }
               />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="email" className="text-white">
-              Email
-            </Label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-              <Input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="pl-10 bg-gray-800 border-gray-600 text-white"
-                required
-              />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password" className="text-white">
-              Password
-            </Label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-              <Input
-                id="password"
-                type="password"
-                placeholder="Create a password (min 6 characters)"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="pl-10 bg-gray-800 border-gray-600 text-white"
-                required
-                minLength={6}
-              />
-            </div>
-          </div>
-          <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={isLoading}>
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Creating account...
-              </>
-            ) : (
-              "Create Account"
-            )}
-          </Button>
-        </motion.form>
+              <Button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700"
+                disabled={isPending}
+              >
+                {isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin " />
+                    Creating account...
+                  </>
+                ) : (
+                  "Create Account"
+                )}
+              </Button>
+            </motion.form>
+          </Form>
+        </CardWrapper>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-async function signup(name: string, email: string, password: string): Promise<boolean> {
-  // TODO: Implement actual signup logic here.
-  // For now, simulate a successful signup:
-  return true
-}
-

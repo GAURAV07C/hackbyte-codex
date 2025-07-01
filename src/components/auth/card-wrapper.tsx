@@ -1,12 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import Header from "@/components/auth/header";
 import Social from "@/components/auth/social";
 import BackButton from "./back-button";
@@ -27,7 +22,7 @@ const CardWrapper = ({
   backButtonHref,
 }: CardWraperProps) => {
   return (
-    <Card className="w-[400px] shadow-md">
+    <div className="w-[400px] shadow-md">
       <CardHeader>
         <Header label={headerLabel} />
       </CardHeader>
@@ -37,10 +32,10 @@ const CardWrapper = ({
           <Social />
         </CardFooter>
       )}
-      <CardFooter>
+      <CardFooter className="py-2 gap-y-2">
         <BackButton label={backButtonLabel} href={backButtonHref} />
       </CardFooter>
-    </Card>
+    </div>
   );
 };
 

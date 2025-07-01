@@ -2,12 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
-// import { AuthProvider } from "@/lib/auth-context";
-// import { AdminProvider } from "@/lib/admin-context";
-// import { WebinarProvider } from "@/lib/webinar-context";
-// import { Toaster } from "@/components/ui/toaster";
-// import { NotificationProvider } from "@/components/dashboard/notification-provider";
-
+import { ReactQueryProvider } from "@/components/ReactQueryProvider";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -38,17 +33,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* <AuthProvider>
-          <AdminProvider>
-            <WebinarProvider>
-              <NotificationProvider> */}
-        {children}
+        <ReactQueryProvider>
+          {children}
 
-        <Toaster />
-        {/* </NotificationProvider>
-            </WebinarProvider>
-          </AdminProvider>
-        </AuthProvider> */}
+          <Toaster />
+        </ReactQueryProvider>
       </body>
     </html>
   );

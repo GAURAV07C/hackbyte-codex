@@ -9,8 +9,8 @@ import { getUserByEmail } from "@/data/user";
 export default {
   providers: [
     Github({
-      clientId: process.env.AUTH_GITHUB_ID,
-      clientSecret: process.env.AUTH_GITHUB_SECRET,
+      clientId: process.env.AUTH_GITHUB_ID!,
+      clientSecret: process.env.AUTH_GITHUB_SECRET!,
       authorization: {
         params: {
           prompt: "consent",
@@ -20,8 +20,8 @@ export default {
       },
     }),
     Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      clientId: process.env.AUTH_GOOGLE_ID!,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
       authorization: {
         params: {
           prompt: "consent",
@@ -48,6 +48,10 @@ export default {
 
         return null;
       },
+      credentials: {
+        email: { label: "Email", type: "email", placeholder: "you@example.com" },
+        password: { label: "Password", type: "password" }
+      }
     }),
   ],
 } satisfies NextAuthConfig;

@@ -9,19 +9,21 @@ export const LoginSchema = z.object({
   }),
 });
 
-export const RegisterSchema = z.object({
-  email: z.string().email({
-    message: "Email is required",
-  }),
-  name: z.string().min(1, {
-    message: "Name is required",
-  }),
-  password: z.string().min(6, {
-    message: "Minimum 6 character required",
-  }),
+export const RegisterSchema = z
+  .object({
+    email: z.string().email({
+      message: "Email is required",
+    }),
+    name: z.string().min(1, {
+      message: "Name is required",
+    }),
+    password: z.string().min(6, {
+      message: "Minimum 6 character required",
+    }),
 
     confirm_password: z.string({ message: "Confirm Password is required" }),
-  }).superRefine((data, ctx) => {
+  })
+  .superRefine((data, ctx) => {
     if (data.password !== data.confirm_password) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -37,12 +39,8 @@ export const ResetSchema = z.object({
   }),
 });
 
-
-
-
 export const NewPasswordSchema = z
   .object({
-    
     password: z.string().min(6, {
       message: "Minimum 6 character required",
     }),
