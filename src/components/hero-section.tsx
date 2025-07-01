@@ -1,11 +1,16 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Play, ArrowRight, Calendar, Clock, Users } from "lucide-react";
 import { motion } from "framer-motion";
+import { useAuth } from "@/lib/auth-context";
+import { SignupDialog } from "./auth/signup-dialog";
 
 export function HeroSection() {
+  const { user } = useAuth();
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -23,6 +28,18 @@ export function HeroSection() {
       y: 0,
       opacity: 1,
     },
+  };
+
+  const handleJoinWebinar = () => {
+    if (user) {
+      // Redirect to webinar room or show webinar interface
+      alert("Redirecting to live webinar...");
+    }
+  };
+
+  const handleWatchPreview = () => {
+    // Open preview video or demo
+    alert("Opening preview video...");
   };
 
   return (
@@ -43,7 +60,7 @@ export function HeroSection() {
               <motion.div
                 className="w-2 h-2 bg-red-500 rounded-full mr-2"
                 animate={{ scale: [1, 1.2, 1] }}
-                transition={{ repeat: Infinity, duration: 2 }}
+                transition={{ repeat: Number.POSITIVE_INFINITY, duration: 2 }}
               />
               LIVE WEBINAR SERIES
             </Badge>
@@ -114,20 +131,43 @@ export function HeroSection() {
             variants={itemVariants}
             className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center mb-12 md:mb-20 px-4"
           >
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                size="lg"
-                className="bg-blue-600 hover:bg-blue-700 text-white text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 font-semibold w-full sm:w-auto"
+            {user ? (
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Join Live Now
-                <ArrowRight className="ml-2 h-4 md:h-5 w-4 md:w-5" />
-              </Button>
-            </motion.div>
+                <Button
+                  size="lg"
+                  className="bg-blue-600 hover:bg-blue-700 text-white text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 font-semibold w-full sm:w-auto"
+                  onClick={handleJoinWebinar}
+                >
+                  Join Live Now
+                  <ArrowRight className="ml-2 h-4 md:h-5 w-4 md:w-5" />
+                </Button>
+              </motion.div>
+            ) : (
+              <SignupDialog>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button
+                    size="lg"
+                    className="bg-blue-600 hover:bg-blue-700 text-white text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 font-semibold w-full sm:w-auto"
+                  >
+                    Join Live Now
+                    <ArrowRight className="ml-2 h-4 md:h-5 w-4 md:w-5" />
+                  </Button>
+                </motion.div>
+              </SignupDialog>
+            )}
+
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 variant="outline"
                 size="lg"
                 className="border-2 border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 font-semibold bg-transparent w-full sm:w-auto"
+                onClick={handleWatchPreview}
               >
                 <Play className="w-4 md:w-5 h-4 md:h-5 mr-2" />
                 Watch Preview

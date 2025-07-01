@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -5,8 +7,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Calendar, Clock, Users, Play } from "lucide-react";
 import { webinarData } from "@/data/webinar-data";
 import { motion } from "framer-motion";
+import { useAuth } from "@/lib/auth-context";
+import { SignupDialog } from "./auth/signup-dialog";
 
 export function WebinarsSection() {
+  const { user } = useAuth();
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -30,6 +36,17 @@ export function WebinarsSection() {
     },
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleWebinarAction = (webinar: any) => {
+    if (user) {
+      if (webinar.status === "live") {
+        alert(`Joining live webinar: ${webinar.topic}`);
+      } else {
+        alert(`Registering for: ${webinar.topic}`);
+      }
+    }
+  };
+
   return (
     <section id="webinars" className="py-24 bg-gray-800">
       <div className="container mx-auto px-4">
@@ -49,9 +66,8 @@ export function WebinarsSection() {
           </p>
         </motion.div>
 
-        {/*   i want to dispaly content in center  */}
         <motion.div
-          className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 md:gap-8  "
+          className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 md:gap-8"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -70,7 +86,10 @@ export function WebinarsSection() {
                     <motion.div
                       className="flex items-center mb-3 md:mb-4"
                       animate={{ opacity: [1, 0.5, 1] }}
-                      transition={{ repeat: Infinity, duration: 2 }}
+                      transition={{
+                        repeat: Number.POSITIVE_INFINITY,
+                        duration: 2,
+                      }}
                     >
                       <div className="w-2 h-2 bg-red-500 rounded-full mr-2" />
                       <span className="text-red-400 text-xs font-semibold uppercase">
@@ -133,16 +152,34 @@ export function WebinarsSection() {
                     whileTap={{ scale: 0.98 }}
                     className="mt-auto"
                   >
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm md:text-base">
-                      {webinar.status === "live" ? (
-                        <>
-                          <Play className="w-3 md:w-4 h-3 md:h-4 mr-2" />
-                          Join Live
-                        </>
-                      ) : (
-                        "Register Now"
-                      )}
-                    </Button>
+                    {user ? (
+                      <Button
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm md:text-base"
+                        onClick={() => handleWebinarAction(webinar)}
+                      >
+                        {webinar.status === "live" ? (
+                          <>
+                            <Play className="w-3 md:w-4 h-3 md:h-4 mr-2" />
+                            Join Live
+                          </>
+                        ) : (
+                          "Register Now"
+                        )}
+                      </Button>
+                    ) : (
+                      <SignupDialog>
+                        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm md:text-base">
+                          {webinar.status === "live" ? (
+                            <>
+                              <Play className="w-3 md:w-4 h-3 md:h-4 mr-2" />
+                              Join Live
+                            </>
+                          ) : (
+                            "Register Now"
+                          )}
+                        </Button>
+                      </SignupDialog>
+                    )}
                   </motion.div>
                 </CardContent>
               </Card>
