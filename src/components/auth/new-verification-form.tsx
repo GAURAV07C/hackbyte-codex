@@ -8,9 +8,6 @@ import { BeatLoader } from "react-spinners";
 import FormError from "@/components/form-error";
 import FormSucess from "@/components/form-sucess";
 
-
-
-
 const NewVerificationForm = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>

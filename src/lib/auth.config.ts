@@ -1,5 +1,5 @@
 import Credentials from "next-auth/providers/credentials";
-import Github from "next-auth/providers/github";
+
 import Google from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 import type { NextAuthConfig } from "next-auth";
@@ -8,20 +8,9 @@ import { getUserByEmail } from "@/data/user";
 // Notice this is only an object, not a full Auth.js instance
 export default {
   providers: [
-    Github({
-      clientId: process.env.AUTH_GITHUB_ID!,
-      clientSecret: process.env.AUTH_GITHUB_SECRET!,
-      authorization: {
-        params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
-        },
-      },
-    }),
     Google({
-      clientId: process.env.AUTH_GOOGLE_ID!,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
       authorization: {
         params: {
           prompt: "consent",
@@ -48,10 +37,6 @@ export default {
 
         return null;
       },
-      credentials: {
-        email: { label: "Email", type: "email", placeholder: "you@example.com" },
-        password: { label: "Password", type: "password" }
-      }
     }),
   ],
 } satisfies NextAuthConfig;

@@ -6,7 +6,6 @@ import prisma from "@/lib/prisma";
 import { LoginSchema, RegisterSchema, ResetSchema } from "@/schemas/AuthSchema";
 import { getUserByEmail } from "@/data/user";
 import { signIn } from "@/lib/auth";
-import { DEFAULT_LOGIN_REDIRECT } from "@/lib/routes";
 import { generatePasswordToken, generateVerificationToken } from "@/lib/tokens";
 import { sendPasswordResendEmail, sendVerificationEmail } from "@/lib/mail";
 import { validate } from "@/lib/validate";
@@ -40,15 +39,20 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     await signIn("credentials", {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirect: false,
     });
     return { success: true, message: "Login successful!" };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error?.type === "CredentialsSignin") {
       return { success: false, message: "Invalid credentials!" };
     }
-    return { success: false, message: "Something went wrong!" };
+
+    // Log the error internally
+    console.error("Login error:", error);
+
+    // Never expose error object to client
+    return { success: false, message: "Something went wrong!", error: error };
   }
 };
 

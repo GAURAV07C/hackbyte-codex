@@ -5,7 +5,7 @@ import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { DEFAULT_LOGIN_REDIRECT } from "@/lib/routes";
 const Social = () => {
-  const onClick = (provider: "google" | "github") => {
+  const onClick = (provider: "google") => {
     signIn(provider, {
       callbackUrl: DEFAULT_LOGIN_REDIRECT,
     });

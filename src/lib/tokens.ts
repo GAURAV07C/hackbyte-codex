@@ -1,6 +1,6 @@
 import { getPasswordResetTokenByEmail } from "@/data/password-reset-token";
 import { getVerificationTokenByEmail } from "@/data/verification-token";
-import prisma  from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import { v4 as uuidv4 } from "uuid";
 
 export const generatePasswordToken = async (email: string) => {
@@ -26,7 +26,7 @@ export const generatePasswordToken = async (email: string) => {
     },
   });
 
-  return passwordResetToken
+  return passwordResetToken;
 };
 
 export const generateVerificationToken = async (email: string) => {

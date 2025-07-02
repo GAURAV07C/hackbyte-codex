@@ -1,124 +1,195 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { motion } from "framer-motion"
-import { Loader2, Mail, Lock } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+} from "@/components/ui/dialog";
+import * as z from "zod";
+import { Input } from "@/components/ui/input";
+import { motion } from "framer-motion";
+import { Loader2, Mail, Lock } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import CardWrapper from "./card-wrapper";
+
+import { LoginSchema } from "@/schemas/AuthSchema";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+import FormError from "@/components/form-error";
+import FormSucess from "@/components/form-sucess";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useLogin } from "@/lib/queries/auth";
 
 interface LoginDialogProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export function LoginDialog({ children }: LoginDialogProps) {
-  const [open, setOpen] = useState(false)
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const { toast } = useToast()
-  const [isLoading, setIsLoading] = useState(false)
+  const [open, setOpen] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    const success = await login(email, password)
-    setIsLoading(false)
+  const { mutate, isPending } = useLogin();
 
-    if (success) {
-      toast({
-        title: "Welcome back!",
-        description: "You have successfully logged in.",
-      })
-      setOpen(false)
-      setEmail("")
-      setPassword("")
-    } else {
-      toast({
-        title: "Login failed",
-        description: "Please check your credentials and try again.",
-        variant: "destructive",
-      })
-    }
-  }
+  const { toast } = useToast();
 
+  const searchParams = useSearchParams();
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email is Already in use with Different Provided"
+      : "";
+  const [error, setError] = useState<string | undefined>("");
+  const [sucess, setSucess] = useState<string | undefined>("");
+
+  const form = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const router = useRouter();
+  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+    mutate(values, {
+      onSuccess: (data) => {
+        if (data.success) {
+          setSucess("Login successful");
+          toast({
+            title: "Loggin successFully",
+          });
+          toast({ title: "Logged in!" });
+          router.push("/dashboard");
+          form.reset();
+          setOpen(false);
+        } else {
+          toast({
+            title: "Signup failed",
+            description: data.message as string,
+            variant: "destructive",
+          });
+        }
+      },
+      onError: (error) => {
+        toast({
+          title: "Something went wrong",
+          description:
+            error instanceof z.ZodError
+              ? "Validation Error"
+              : "Please try again.",
+          variant: "destructive",
+        });
+        setError(error.message);
+      },
+    });
+  };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px] bg-gray-900 border-gray-700">
-        <DialogHeader>
-          <DialogTitle className="text-white">Sign In</DialogTitle>
-          <DialogDescription className="text-gray-400">Enter your credentials to access your account</DialogDescription>
-        </DialogHeader>
-        <motion.form
-          onSubmit={handleSubmit}
-          className="space-y-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
+        <CardWrapper
+          headerLabel="Create an account "
+          backButtonLabel="Already have an account?"
+          backButtonHref="/auth/login"
+          showSocial
         >
-          <div className="space-y-2">
-            <Label htmlFor="email" className="text-white">
-              Email
-            </Label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-              <Input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="pl-10 bg-gray-800 border-gray-600 text-white"
-                required
-              />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password" className="text-white">
-              Password
-            </Label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="pl-10 bg-gray-800 border-gray-600 text-white"
-                required
-              />
-            </div>
-          </div>
-          <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={isLoading}>
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Signing in...
-              </>
-            ) : (
-              "Sign In"
-            )}
-          </Button>
-        </motion.form>
+          <DialogHeader>
+            <DialogDescription className="text-gray-400 font-medium text-sm">
+              Enter your credentials to access your account
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...form}>
+            <motion.form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-4 py-5"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-white">Email</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                            <Input
+                              disabled={isPending}
+                              {...field}
+                              placeholder="Enter your email"
+                              type="email"
+                              className="pl-10 bg-gray-800 border-gray-600 text-white"
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-white">Password</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                            <Input
+                              {...field}
+                              disabled={isPending}
+                              placeholder="Create a password (min 6 characters)"
+                              className="pl-10 bg-gray-800 border-gray-600 text-white"
+                              type="password"
+                              minLength={6}
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+              <FormError message={error || urlError} />
+              <FormSucess message={sucess} />
+              <Button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700"
+                disabled={isPending}
+              >
+                {isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  "Sign In"
+                )}
+              </Button>
+            </motion.form>
+          </Form>
+        </CardWrapper>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-async function login(email: string, password: string): Promise<boolean> {
-  // TODO: Replace with real authentication logic
-  // For now, simulate a successful login if email and password are not empty
-  return email.length > 0 && password.length > 0;
-}
-

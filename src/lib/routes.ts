@@ -13,8 +13,8 @@ export const publicRouts = ["/", "/auth/new-verification", "/:userName"];
  */
 
 export const authRoutes = [
-  "/auth/login",
-  "/auth/signup",
+  "/",
+  
   "/auth/error",
   "/auth/reset",
   "/auth/new-password",
@@ -33,4 +33,4 @@ export const apiAuthPrefix = "/api/auth";
  * @type {string}
  */
 
-export const DEFAULT_LOGIN_REDIRECT = "/feed";
+export const DEFAULT_LOGIN_REDIRECT = "/dashboard";
