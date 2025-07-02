@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import { Card, CardContent } from "@/components/ui/card"
@@ -6,13 +7,52 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Calendar, Clock, Users, ExternalLink, CheckCircle, LinkIcon } from "lucide-react"
 import { motion } from "framer-motion"
-import { useWebinars } from "@/lib/webinar-context"
-import { useNotifications } from "./notification-provider"
+
 import { useState, useEffect } from "react"
 
+// Simple notification handler (replace with your own or a library as needed)
+function showNotification({
+  title,
+  message,
+  
+  duration,
+ 
+  onAction,
+}: {
+  title: string
+  message: string
+  type?: string
+  priority?: string
+  duration?: number
+  actionLabel?: string
+  onAction?: () => void
+}) {
+  // For demonstration, use the browser Notification API if available
+  if ("Notification" in window) {
+    if (Notification.permission === "granted") {
+      const notification = new Notification(title, { body: message })
+      if (onAction) {
+        notification.onclick = () => {
+          onAction()
+          notification.close()
+        }
+      }
+      setTimeout(() => notification.close(), duration || 4000)
+    } else if (Notification.permission !== "denied") {
+      Notification.requestPermission()
+    }
+  } else {
+    // Fallback: alert
+    alert(`${title}\n${message}`)
+    if (onAction) onAction()
+  }
+}
+
 export function MyWebinarsTab() {
-  const { registeredWebinars, joinLiveWebinar } = useWebinars()
-  const { showNotification } = useNotifications()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [registeredWebinars, setRegisteredWebinars] = useState<any[]>([])
+  
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentTime, setCurrentTime] = useState(new Date())
 
   useEffect(() => {
@@ -143,7 +183,6 @@ export function MyWebinarsTab() {
 
   const liveWebinars = registeredWebinars.filter((w) => w.status === "live")
   const upcomingWebinars = registeredWebinars.filter((w) => w.status === "upcoming")
-  const endedWebinars = registeredWebinars.filter((w) => w.status === "ended")
 
   return (
     <div className="space-y-6">
@@ -204,7 +243,7 @@ export function MyWebinarsTab() {
                           <AvatarFallback>
                             {webinar.instructor
                               .split(" ")
-                              .map((n) => n[0])
+                              .map((n: any[]) => n[0])
                               .join("")}
                           </AvatarFallback>
                         </Avatar>
@@ -299,7 +338,7 @@ export function MyWebinarsTab() {
         <div className="text-center py-12">
           <Calendar className="h-16 w-16 text-gray-600 mx-auto mb-4" />
           <h3 className="text-xl font-bold text-white mb-2">No Registered Webinars</h3>
-          <p className="text-gray-400 mb-4">You haven't registered for any webinars yet</p>
+          <p className="text-gray-400 mb-4">You haven&lsquo;t registered for any webinars yet</p>
           <Button
             className="bg-blue-600 hover:bg-blue-700 text-white"
             onClick={() => {

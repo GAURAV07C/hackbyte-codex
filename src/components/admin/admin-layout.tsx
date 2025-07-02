@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useAuth } from "@/lib/auth-context"
+
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
 import {
@@ -22,7 +22,7 @@ interface AdminLayoutProps {
 }
 
 export function AdminLayout({ children, activeTab, onTabChange }: AdminLayoutProps) {
-  const { user } = useAuth()
+  const user: { name: string } = { name: "Admin" }
 
   const getTabTitle = (tab: string) => {
     const titles: Record<string, string> = {

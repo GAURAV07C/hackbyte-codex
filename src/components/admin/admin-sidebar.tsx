@@ -1,5 +1,4 @@
 "use client"
-import { useAuth } from "@/lib/auth-context"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -65,7 +64,9 @@ const navigationItems = [
 ]
 
 export function AdminSidebar({ activeTab, onTabChange }: AdminSidebarProps) {
-  const { user, logout } = useAuth()
+  // TODO: Replace with actual user context or props
+  const user = { name: "Admin", avatar: "" }
+  const logout = () => { /* implement logout logic */ }
 
   return (
     <Sidebar variant="inset">

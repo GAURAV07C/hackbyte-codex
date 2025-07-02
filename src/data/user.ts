@@ -1,6 +1,6 @@
 "use server";
 
-import  prisma  from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
 export const getUserByEmail = async (email: string) => {
@@ -23,15 +23,13 @@ export const getUserByUserName = async (userName: string) => {
       where: { userName },
       select: {
         id: true,
-      
+
         name: true,
         image: true,
         userName: true,
-      
+
         email: true,
         createdAt: true,
-       
-        
       },
     });
 
@@ -52,16 +50,14 @@ export const getUserById = async (id: string) => {
       where: { id: id },
       select: {
         id: true,
-    
+
         name: true,
         image: true,
         userName: true,
-       
+
         email: true,
-        emailVerified:true,
+        emailVerified: true,
         createdAt: true,
-        
-       
       },
     });
 
@@ -75,17 +71,13 @@ export const getRandomUsers = async (id: string) => {
   try {
     const randomusers = await prisma.user.findMany({
       where: {
-        AND: [
-          { NOT: { id: id } },
-         
-        ],
+        AND: [{ NOT: { id: id } }],
       },
       select: {
         id: true,
         name: true,
         userName: true,
         image: true,
-       
       },
       take: 3,
     });
@@ -96,19 +88,14 @@ export const getRandomUsers = async (id: string) => {
   }
 };
 
-
-
 export async function updateProfile(formData: FormData, userId: string) {
   try {
     const name = formData.get("name") as string;
-   
 
     const user = await prisma.user.update({
       where: { id: userId },
       data: {
         name,
-      
-       
       },
     });
 
@@ -119,7 +106,3 @@ export async function updateProfile(formData: FormData, userId: string) {
     return { success: false, error: "Failed to update profile" };
   }
 }
-
-
-
-

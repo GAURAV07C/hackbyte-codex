@@ -325,7 +325,7 @@ export function NotificationsDropdown() {
                     <div className="p-8 text-center">
                       <Bell className="h-12 w-12 text-gray-600 mx-auto mb-4" />
                       <p className="text-gray-400">No notifications</p>
-                      <p className="text-gray-500 text-sm mt-1">You're all caught up!</p>
+                      <p className="text-gray-500 text-sm mt-1">You&lsquo;re all caught up!</p>
                     </div>
                   )}
                 </ScrollArea>

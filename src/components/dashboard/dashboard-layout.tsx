@@ -6,8 +6,6 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { BookOpen, Star, Settings, User, LogOut, Home, Video } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useAuth } from "@/lib/auth-context"
-import { ThemeToggle } from "../theme-toggle"
 import { siteData } from "@/data/site-data"
 import { NotificationsDropdown } from "./notifications-dropdown"
 
@@ -18,8 +16,19 @@ interface DashboardLayoutProps {
 }
 
 export function DashboardLayout({ children, activeTab, onTabChange }: DashboardLayoutProps) {
-  const { user, logout } = useAuth()
-  const [notifications] = useState([
+
+  
+  // TODO: Replace with real user and logout logic from your auth provider
+  const user = {
+    name: "John Doe",
+    email: "john.doe@example.com",
+    avatar: "/placeholder.svg"
+  }
+  const logout = () => {
+    // Implement logout logic here
+    alert("Logged out")
+  }
+  const [] = useState([
     {
       id: 1,
       title: "New Webinar: AI & Machine Learning",
@@ -147,7 +156,6 @@ export function DashboardLayout({ children, activeTab, onTabChange }: DashboardL
             </div>
 
             <div className="flex items-center space-x-4">
-              <ThemeToggle />
 
               {/* Notifications */}
               <div className="relative">

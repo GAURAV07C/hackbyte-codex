@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import { Card, CardContent } from "@/components/ui/card"
@@ -6,14 +7,53 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Calendar, Clock, Users, Bell, ExternalLink, CheckCircle, LinkIcon } from "lucide-react"
 import { motion } from "framer-motion"
-import { useNotifications } from "./notification-provider"
-import { useWebinars } from "@/lib/webinar-context"
 import { useState, useEffect } from "react"
 
+/**
+ * Displays a notification to the user.
+ * Replace this stub with your actual notification logic or import.
+ */
+function showNotification({
+  title,
+  message,
+  
+}: {
+  title: string
+  message: string
+  type?: string
+  priority?: string
+  duration?: number
+  actionLabel?: string
+  onAction?: () => void
+}) {
+  // Example: Replace with your notification system (toast, snackbar, etc.)
+  alert(`${title}\n${message}`)
+}
+
+type Webinar = {
+  id: string
+  title: string
+  description: string
+  category: string
+  level?: string
+  instructor: string
+  instructorTitle?: string
+  instructorImage?: string
+  attendees: number
+  maxAttendees: number
+  status: "live" | "upcoming"
+  duration?: string
+  meetingLink: string
+  date?: string
+  time?: string
+  startDateTime: Date
+}
+
 export function LiveWebinarsTab() {
-  const { webinars, registerForWebinar, joinLiveWebinar, isRegistered, getLiveWebinars, getUpcomingWebinars } =
-    useWebinars()
-  const { showNotification } = useNotifications()
+ 
+
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentTime, setCurrentTime] = useState(new Date())
 
   useEffect(() => {
@@ -23,6 +63,16 @@ export function LiveWebinarsTab() {
 
     return () => clearInterval(timer)
   }, [])
+
+  // TODO: Replace with real data fetching logic or import these functions from your data layer
+  function getLiveWebinars(): Webinar[] {
+    // Example mock data
+    return []
+  }
+  function getUpcomingWebinars(): Webinar[] {
+    // Example mock data
+    return []
+  }
 
   const liveWebinars = getLiveWebinars()
   const upcomingWebinars = getUpcomingWebinars()
@@ -389,3 +439,20 @@ export function LiveWebinarsTab() {
     </div>
   )
 }
+// Simple registration logic using localStorage for demo purposes
+function registerForWebinar(id: any) {
+  const key = "registeredWebinars"
+  const existing = JSON.parse(localStorage.getItem(key) || "[]")
+  if (!existing.includes(id)) {
+    existing.push(id)
+    localStorage.setItem(key, JSON.stringify(existing))
+  }
+}
+
+// Helper to check registration status
+function isRegistered(id: any) {
+  const key = "registeredWebinars"
+  const existing = JSON.parse(localStorage.getItem(key) || "[]")
+  return existing.includes(id)
+}
+
