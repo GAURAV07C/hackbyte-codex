@@ -4,14 +4,17 @@ const page =async () => {
 
   const session = await  auth();
 
+ 
+  if (!session) return <div>Not authenticated</div>;
+
   
 
   return (
     <div>
       hii
-      {session?.user?.userName}
+      <pre>{JSON.stringify(session, null, 2)}</pre>
     </div>
-  )
+  );
 }
 
 export default page

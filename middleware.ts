@@ -10,19 +10,19 @@ import {
 
 const { auth } = NextAuth(authconfig);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default auth((req: { auth?: any; nextUrl?: any; }) => {
+export default auth((req) => {
+  console.log(req)
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
 
- const isPublicRoute =
-   publicRouts.includes(nextUrl.pathname) ||
-   /^\/[^\/]+$/.test(nextUrl.pathname);
+  const isPublicRoute =
+    publicRouts.includes(nextUrl.pathname) ||
+    /^\/[^\/]+$/.test(nextUrl.pathname);
 
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-  console.log(nextUrl.pathname)
+  console.log(nextUrl.pathname);
 
   if (isApiAuthRoute) {
     return;
@@ -36,7 +36,7 @@ export default auth((req: { auth?: any; nextUrl?: any; }) => {
     return;
   }
 
-  if (!isLoggedIn && (nextUrl.pathname === "/feed" || !isPublicRoute)) {
+  if (!isLoggedIn && (nextUrl.pathname === "/dashboard" || !isPublicRoute)) {
     return Response.redirect(new URL("/auth/login", nextUrl));
   }
 

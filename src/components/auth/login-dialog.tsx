@@ -34,6 +34,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLogin } from "@/lib/queries/auth";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 interface LoginDialogProps {
   children: React.ReactNode;
@@ -107,6 +108,7 @@ export function LoginDialog({ children }: LoginDialogProps) {
           showSocial
         >
           <DialogHeader>
+            <DialogTitle></DialogTitle>
             <DialogDescription className="text-gray-400 font-medium text-sm">
               Enter your credentials to access your account
             </DialogDescription>

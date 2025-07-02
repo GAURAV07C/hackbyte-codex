@@ -34,6 +34,7 @@ import { motion } from "framer-motion";
 import { Loader2, Mail, Lock, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import CardWrapper from "./card-wrapper";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 interface SignupDialogProps {
   children: React.ReactNode;
@@ -101,6 +102,7 @@ export function SignupDialog({ children }: SignupDialogProps) {
           showSocial
         >
           <DialogHeader>
+            <DialogTitle></DialogTitle>
             <DialogDescription className="text-gray-400 font-medium text-sm">
               Join <span className="text-[#1edaa5]"> HACKBYTE CODEX </span> to
               access exclusive webinars

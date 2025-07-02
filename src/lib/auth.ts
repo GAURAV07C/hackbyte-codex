@@ -18,6 +18,9 @@ async function testprisma() {
 testprisma();
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  pages: {
+    error: "/auth/error",
+  },
   events: {
     async linkAccount({ user }) {
       const email = user.email?.split("@")[0];
