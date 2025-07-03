@@ -11,6 +11,8 @@ import { LoginDialog } from "./auth/login-dialog";
 import { SignupDialog } from "./auth/signup-dialog";
 import { UserMenu } from "./auth/user-menu";
 import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,7 +20,8 @@ export function Navbar() {
   // const { user } = useAuth();
   // For demo purposes, set user to null or a mock object:
   // const user = { name: "John Doe" }; // Uncomment for testing authenticated state
-  const user: { name: string } | null = null;
+  const { data: session } = useSession();
+  const user = session?.user;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,7 +60,7 @@ export function Navbar() {
             onClick={() => handleNavClick("#home")}
           >
             <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">S</span>
+              <Image src={"/logo.png"} alt="logo" width={90} height={90} />
             </div>
             <div>
               <div className="hidden sm:block">

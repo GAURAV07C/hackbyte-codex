@@ -11,24 +11,19 @@ import {
   Video,
 } from "lucide-react";
 import React from "react";
+import { useSession, signOut } from "next-auth/react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const DashboardSidebar = () => {
   const pathname = usePathname();
+  const { data: session } = useSession();
 
-  const user = {
-    name: "John Doe",
-    email: "john.doe@example.com",
-    avatar: "/placeholder.svg",
-  };
-  const logout = () => {
-    // Implement logout logic here
-    alert("Logged out");
-  };
+  const user = session?.user;
 
   const sidebarItems = [
     { id: "overview", label: "Overview", icon: Home, link: "/dashboard" },
@@ -65,7 +60,7 @@ const DashboardSidebar = () => {
       <div className="p-6 border-b border-gray-700">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-lg">S</span>
+             <Image src={"/logo.png"} alt="logo" width={90} height={90} />
           </div>
           <div>
             <span className="text-xl font-bold text-white">
@@ -81,8 +76,8 @@ const DashboardSidebar = () => {
         <div className="flex items-center space-x-3">
           <Avatar className="w-12 h-12">
             <AvatarImage
-              src={user?.avatar || "/placeholder.svg"}
-              alt={user?.name}
+              src={user?.image || "/placeholder.svg"}
+              alt={user?.name ?? undefined}
             />
             <AvatarFallback className="bg-blue-600 text-white">
               {user?.name?.charAt(0).toUpperCase()}
@@ -126,7 +121,7 @@ const DashboardSidebar = () => {
         <Button
           variant="ghost"
           className="w-full justify-start text-gray-300 hover:text-white hover:bg-gray-700"
-          onClick={logout}
+          onClick={() => signOut({ callbackUrl: "/" })}
         >
           <LogOut className="mr-3 h-4 w-4" />
           Logout

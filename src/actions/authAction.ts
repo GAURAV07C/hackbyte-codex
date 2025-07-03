@@ -40,6 +40,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
       email,
       password,
       redirect: false,
+      callbackUrl: "/dashboard",
     });
     return { success: true, message: "Login successful!" };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
