@@ -1,8 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  webpack: (config) => {
+    config.context = __dirname; // set root context to your project folder
+    return config;
+  },
 };
-export const runtime = "nodejs";
 
 export default nextConfig;

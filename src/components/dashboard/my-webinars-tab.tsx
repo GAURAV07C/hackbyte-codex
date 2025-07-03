@@ -48,7 +48,7 @@ function showNotification({
   }
 }
 
-export function MyWebinarsTab() {
+export function MyWebinars() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [registeredWebinars, setRegisteredWebinars] = useState<any[]>([])
   

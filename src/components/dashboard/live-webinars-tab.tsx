@@ -1,13 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client"
+"use client";
 
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Calendar, Clock, Users, Bell, ExternalLink, CheckCircle, LinkIcon } from "lucide-react"
-import { motion } from "framer-motion"
-import { useState, useEffect } from "react"
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Calendar,
+  Clock,
+  Users,
+  Bell,
+  ExternalLink,
+  CheckCircle,
+  LinkIcon,
+} from "lucide-react";
+import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 
 /**
  * Displays a notification to the user.
@@ -16,66 +24,95 @@ import { useState, useEffect } from "react"
 function showNotification({
   title,
   message,
-  
 }: {
-  title: string
-  message: string
-  type?: string
-  priority?: string
-  duration?: number
-  actionLabel?: string
-  onAction?: () => void
+  title: string;
+  message: string;
+  type?: string;
+  priority?: string;
+  duration?: number;
+  actionLabel?: string;
+  onAction?: () => void;
 }) {
   // Example: Replace with your notification system (toast, snackbar, etc.)
-  alert(`${title}\n${message}`)
+  alert(`${title}\n${message}`);
 }
 
 type Webinar = {
-  id: string
-  title: string
-  description: string
-  category: string
-  level?: string
-  instructor: string
-  instructorTitle?: string
-  instructorImage?: string
-  attendees: number
-  maxAttendees: number
-  status: "live" | "upcoming"
-  duration?: string
-  meetingLink: string
-  date?: string
-  time?: string
-  startDateTime: Date
-}
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  level?: string;
+  instructor: string;
+  instructorTitle?: string;
+  instructorImage?: string;
+  attendees: number;
+  maxAttendees: number;
+  status: "live" | "upcoming";
+  duration?: string;
+  meetingLink: string;
+  date?: string;
+  time?: string;
+  startDateTime: Date;
+};
 
-export function LiveWebinarsTab() {
- 
-
-
+export function LiveWebinars() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [currentTime, setCurrentTime] = useState(new Date())
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentTime(new Date())
-    }, 1000)
+      setCurrentTime(new Date());
+    }, 1000);
 
-    return () => clearInterval(timer)
-  }, [])
+    return () => clearInterval(timer);
+  }, []);
 
   // TODO: Replace with real data fetching logic or import these functions from your data layer
   function getLiveWebinars(): Webinar[] {
-    // Example mock data
-    return []
-  }
-  function getUpcomingWebinars(): Webinar[] {
-    // Example mock data
-    return []
+    return [
+      {
+        id: "1",
+        title: "AI for Developers",
+        description: "Learn how to integrate AI into your web apps.",
+        category: "Tech",
+        instructor: "Jane Doe",
+        instructorTitle: "Senior AI Engineer",
+        instructorImage: "/placeholder.svg",
+        attendees: 150,
+        maxAttendees: 500,
+        status: "live",
+        duration: "1h 30m",
+        meetingLink: "https://meet.google.com/test-live",
+        startDateTime: new Date(new Date().getTime() - 5 * 60 * 1000), // 5 mins ago
+      },
+    ];
   }
 
-  const liveWebinars = getLiveWebinars()
-  const upcomingWebinars = getUpcomingWebinars()
+  function getUpcomingWebinars(): Webinar[] {
+    return [
+      {
+        id: "2",
+        title: "Next.js Best Practices",
+        description: "Master advanced Next.js features for production apps.",
+        category: "Frontend",
+        instructor: "John Smith",
+        instructorTitle: "Lead Frontend Engineer",
+        instructorImage: "/placeholder.svg",
+        attendees: 200,
+        maxAttendees: 500,
+        status: "upcoming",
+        duration: "2h",
+        meetingLink: "https://meet.google.com/test-upcoming",
+        date: "2025-07-05",
+        time: "5:00 PM",
+        startDateTime: new Date(new Date().getTime() + 60 * 60 * 1000), // 1 hour from now
+      },
+    ];
+  }
+
+  const liveWebinars = getLiveWebinars();
+  const upcomingWebinars = getUpcomingWebinars();
 
   const handleJoinWebinar = (webinar: any) => {
     if (!isRegistered(webinar.id)) {
@@ -84,12 +121,12 @@ export function LiveWebinarsTab() {
         message: "You need to register first to join this webinar",
         type: "reminder",
         priority: "high",
-      })
-      return
+      });
+      return;
     }
 
     // Always allow joining for registered users
-    window.open(webinar.meetingLink, "_blank", "noopener,noreferrer")
+    window.open(webinar.meetingLink, "_blank", "noopener,noreferrer");
 
     if (webinar.status === "live") {
       showNotification({
@@ -98,7 +135,7 @@ export function LiveWebinarsTab() {
         type: "live",
         priority: "high",
         duration: 3000,
-      })
+      });
     } else {
       showNotification({
         title: "🔗 Opening Meeting Room",
@@ -106,12 +143,12 @@ export function LiveWebinarsTab() {
         type: "reminder",
         priority: "medium",
         duration: 5000,
-      })
+      });
     }
-  }
+  };
 
   const handleRegister = (webinar: any) => {
-    registerForWebinar(webinar.id)
+    registerForWebinar(webinar.id);
     showNotification({
       title: "✅ Registration Confirmed",
       message: `You're registered for ${webinar.title}. You'll receive a reminder 10 minutes before it starts.`,
@@ -119,51 +156,51 @@ export function LiveWebinarsTab() {
       priority: "medium",
       actionLabel: "View My Webinars",
       onAction: () => console.log("Navigate to my webinars"),
-    })
-  }
+    });
+  };
 
   const copyMeetingLink = (webinar: any) => {
-    navigator.clipboard.writeText(webinar.meetingLink)
+    navigator.clipboard.writeText(webinar.meetingLink);
     showNotification({
       title: "📋 Link Copied",
       message: "Meeting link copied to clipboard",
       type: "update",
       priority: "low",
       duration: 2000,
-    })
-  }
+    });
+  };
 
   const getTimeUntilStart = (startDateTime: Date) => {
-    const now = new Date()
-    const diff = startDateTime.getTime() - now.getTime()
+    const now = new Date();
+    const diff = startDateTime.getTime() - now.getTime();
 
-    if (diff <= 0) return "Live Now"
+    if (diff <= 0) return "Live Now";
 
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
-    if (days > 0) return `Starts in ${days}d ${hours}h`
-    if (hours > 0) return `Starts in ${hours}h ${minutes}m`
-    if (minutes > 0) return `Starts in ${minutes}m`
-    return "Starting soon"
-  }
+    if (days > 0) return `Starts in ${days}d ${hours}h`;
+    if (hours > 0) return `Starts in ${hours}h ${minutes}m`;
+    if (minutes > 0) return `Starts in ${minutes}m`;
+    return "Starting soon";
+  };
 
   const getJoinButtonText = (webinar: any) => {
     if (webinar.status === "live") {
-      return "Join Live Now"
+      return "Join Live Now";
     } else {
-      return "Join Meeting Room"
+      return "Join Meeting Room";
     }
-  }
+  };
 
   const getJoinButtonStyle = (webinar: any) => {
     if (webinar.status === "live") {
-      return "bg-red-600 hover:bg-red-700 text-white"
+      return "bg-red-600 hover:bg-red-700 text-white";
     } else {
-      return "bg-blue-600 hover:bg-blue-700 text-white"
+      return "bg-blue-600 hover:bg-blue-700 text-white";
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -182,7 +219,7 @@ export function LiveWebinarsTab() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="bg-gradient-to-r from-red-900/20 to-gray-800 border-red-600/30 border-2">
+                <Card className="bg-gradient-to-r from-orange-900/20 to-gray-800 border-red-600/30 border-2">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center space-x-3">
@@ -190,7 +227,9 @@ export function LiveWebinarsTab() {
                           <div className="w-2 h-2 bg-white rounded-full mr-1" />
                           LIVE NOW
                         </Badge>
-                        <Badge className="bg-blue-600 text-white">{webinar.category}</Badge>
+                        <Badge className="bg-blue-600 text-white">
+                          {webinar.category}
+                        </Badge>
                         {isRegistered(webinar.id) && (
                           <Badge className="bg-green-600 text-white">
                             <CheckCircle className="w-3 h-3 mr-1" />
@@ -207,12 +246,21 @@ export function LiveWebinarsTab() {
 
                     <div className="grid md:grid-cols-3 gap-6">
                       <div className="md:col-span-2">
-                        <h3 className="text-2xl font-bold text-white mb-2">{webinar.title}</h3>
-                        <p className="text-gray-300 mb-4">{webinar.description}</p>
+                        <h3 className="text-2xl font-bold text-white mb-2">
+                          {webinar.title}
+                        </h3>
+                        <p className="text-gray-300 mb-4">
+                          {webinar.description}
+                        </p>
 
                         <div className="flex items-center mb-4">
                           <Avatar className="mr-3 w-12 h-12">
-                            <AvatarImage src={webinar.instructorImage || "/placeholder.svg"} alt={webinar.instructor} />
+                            <AvatarImage
+                              src={
+                                webinar.instructorImage || "/placeholder.svg"
+                              }
+                              alt={webinar.instructor}
+                            />
                             <AvatarFallback>
                               {webinar.instructor
                                 .split(" ")
@@ -221,8 +269,12 @@ export function LiveWebinarsTab() {
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            <p className="font-semibold text-white">{webinar.instructor}</p>
-                            <p className="text-sm text-gray-400">{webinar.instructorTitle}</p>
+                            <p className="font-semibold text-white">
+                              {webinar.instructor}
+                            </p>
+                            <p className="text-sm text-gray-400">
+                              {webinar.instructorTitle}
+                            </p>
                           </div>
                         </div>
 
@@ -243,7 +295,9 @@ export function LiveWebinarsTab() {
                             <div className="flex items-center justify-between">
                               <div className="flex items-center">
                                 <LinkIcon className="h-4 w-4 text-blue-400 mr-2" />
-                                <span className="text-sm text-gray-300">Meeting Link:</span>
+                                <span className="text-sm text-gray-300">
+                                  Meeting Link:
+                                </span>
                               </div>
                               <Button
                                 size="sm"
@@ -254,7 +308,9 @@ export function LiveWebinarsTab() {
                                 Copy Link
                               </Button>
                             </div>
-                            <div className="text-xs text-blue-400 mt-1 font-mono break-all">{webinar.meetingLink}</div>
+                            <div className="text-xs text-blue-400 mt-1 font-mono break-all">
+                              {webinar.meetingLink}
+                            </div>
                           </div>
                         )}
                       </div>
@@ -271,7 +327,9 @@ export function LiveWebinarsTab() {
                           </Button>
                         ) : (
                           <div className="text-center">
-                            <p className="text-red-400 text-sm mb-2">Registration required to join</p>
+                            <p className="text-red-400 text-sm mb-2">
+                              Registration required to join
+                            </p>
                             <Button
                               size="lg"
                               variant="outline"
@@ -294,7 +352,9 @@ export function LiveWebinarsTab() {
 
       {/* Upcoming Webinars */}
       <div>
-        <h2 className="text-xl font-bold text-white mb-4">Upcoming Webinars ({upcomingWebinars.length})</h2>
+        <h2 className="text-xl font-bold text-white mb-4">
+          Upcoming Webinars ({upcomingWebinars.length})
+        </h2>
         <div className="grid md:grid-cols-2 gap-6">
           {upcomingWebinars.map((webinar, index) => (
             <motion.div
@@ -307,7 +367,9 @@ export function LiveWebinarsTab() {
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center space-x-2">
-                      <Badge className="bg-blue-600 text-white">{webinar.category}</Badge>
+                      <Badge className="bg-blue-600 text-white">
+                        {webinar.category}
+                      </Badge>
                       {isRegistered(webinar.id) && (
                         <Badge className="bg-green-600 text-white">
                           <CheckCircle className="w-3 h-3 mr-1" />
@@ -315,12 +377,17 @@ export function LiveWebinarsTab() {
                         </Badge>
                       )}
                     </div>
-                    <Badge className="bg-gray-600 text-white">{webinar.level}</Badge>
+                    <Badge className="bg-gray-600 text-white">
+                      {webinar.level}
+                    </Badge>
                   </div>
 
                   <div className="flex items-center mb-4">
                     <Avatar className="mr-3 w-10 h-10">
-                      <AvatarImage src={webinar.instructorImage || "/placeholder.svg"} alt={webinar.instructor} />
+                      <AvatarImage
+                        src={webinar.instructorImage || "/placeholder.svg"}
+                        alt={webinar.instructor}
+                      />
                       <AvatarFallback>
                         {webinar.instructor
                           .split(" ")
@@ -329,13 +396,21 @@ export function LiveWebinarsTab() {
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-semibold text-white text-sm">{webinar.instructor}</p>
-                      <p className="text-xs text-gray-400">{webinar.instructorTitle}</p>
+                      <p className="font-semibold text-white text-sm">
+                        {webinar.instructor}
+                      </p>
+                      <p className="text-xs text-gray-400">
+                        {webinar.instructorTitle}
+                      </p>
                     </div>
                   </div>
 
-                  <h3 className="text-lg font-bold text-white mb-2">{webinar.title}</h3>
-                  <p className="text-gray-300 text-sm mb-4 line-clamp-2">{webinar.description}</p>
+                  <h3 className="text-lg font-bold text-white mb-2">
+                    {webinar.title}
+                  </h3>
+                  <p className="text-gray-300 text-sm mb-4 line-clamp-2">
+                    {webinar.description}
+                  </p>
 
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center text-sm text-gray-400">
@@ -360,7 +435,9 @@ export function LiveWebinarsTab() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center">
                           <LinkIcon className="h-4 w-4 text-blue-400 mr-2" />
-                          <span className="text-sm text-gray-300">Meeting Link:</span>
+                          <span className="text-sm text-gray-300">
+                            Meeting Link:
+                          </span>
                         </div>
                         <Button
                           size="sm"
@@ -371,7 +448,9 @@ export function LiveWebinarsTab() {
                           Copy
                         </Button>
                       </div>
-                      <div className="text-xs text-blue-400 mt-1 font-mono break-all">{webinar.meetingLink}</div>
+                      <div className="text-xs text-blue-400 mt-1 font-mono break-all">
+                        {webinar.meetingLink}
+                      </div>
                     </div>
                   )}
 
@@ -383,7 +462,10 @@ export function LiveWebinarsTab() {
                       </div>
                       <div className="text-gray-400 text-xs mt-1">
                         {webinar.startDateTime.toLocaleDateString()} at{" "}
-                        {webinar.startDateTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                        {webinar.startDateTime.toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
                       </div>
                     </div>
                   </div>
@@ -432,27 +514,30 @@ export function LiveWebinarsTab() {
       {liveWebinars.length === 0 && upcomingWebinars.length === 0 && (
         <div className="text-center py-12">
           <Calendar className="h-16 w-16 text-gray-600 mx-auto mb-4" />
-          <h3 className="text-xl font-bold text-white mb-2">No Webinars Available</h3>
-          <p className="text-gray-400">Check back later for new webinar announcements</p>
+          <h3 className="text-xl font-bold text-white mb-2">
+            No Webinars Available
+          </h3>
+          <p className="text-gray-400">
+            Check back later for new webinar announcements
+          </p>
         </div>
       )}
     </div>
-  )
+  );
 }
 // Simple registration logic using localStorage for demo purposes
 function registerForWebinar(id: any) {
-  const key = "registeredWebinars"
-  const existing = JSON.parse(localStorage.getItem(key) || "[]")
+  const key = "registeredWebinars";
+  const existing = JSON.parse(localStorage.getItem(key) || "[]");
   if (!existing.includes(id)) {
-    existing.push(id)
-    localStorage.setItem(key, JSON.stringify(existing))
+    existing.push(id);
+    localStorage.setItem(key, JSON.stringify(existing));
   }
 }
 
 // Helper to check registration status
 function isRegistered(id: any) {
-  const key = "registeredWebinars"
-  const existing = JSON.parse(localStorage.getItem(key) || "[]")
-  return existing.includes(id)
+  const key = "registeredWebinars";
+  const existing = JSON.parse(localStorage.getItem(key) || "[]");
+  return existing.includes(id);
 }
-
