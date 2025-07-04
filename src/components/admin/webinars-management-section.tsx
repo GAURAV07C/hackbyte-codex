@@ -211,6 +211,7 @@ export function WebinarsManagementSection() {
             <Download className="mr-2 h-4 w-4" />
             Export
           </Button>
+          
           <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
             <DialogTrigger asChild>
               <Button className="bg-red-600 hover:bg-red-700 text-white">

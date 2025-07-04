@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 const layout = ({
   children,
@@ -8,4 +8,4 @@ const layout = ({
   return <div>{children}</div>;
 };
 
-export default layout
+export default layout;

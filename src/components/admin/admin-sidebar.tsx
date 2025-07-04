@@ -97,7 +97,7 @@ const navigationItems = [
   },
 ];
 
-export function AdminSidebar1() {
+export function AdminSidebar() {
   const pathname = usePathname();
   const { data: session } = useSession();
 

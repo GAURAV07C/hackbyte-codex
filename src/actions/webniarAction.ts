@@ -1,14 +1,31 @@
 import { getUserById } from "@/data/user";
 import prisma from "@/lib/prisma";
+import { validate } from "@/lib/validate";
 import { WebniarSchema } from "@/schemas/webniarSchema";
 import { z } from "zod";
 
 export const createWebniar = async (
   values: z.infer<typeof WebniarSchema>,
-  userId: string
+  userId: string,
+  instructorId: string
 ) => {
   try {
     // User validate
+    const { data, error } = validate(WebniarSchema, values);
+    if (error) return { success: false, message: error };
+
+    const {
+      title,
+      date,
+      time,
+      duration,
+      description,
+      level,
+      category, // yaha string aayi
+      maxAttendees,
+      price,
+      status,
+    } = data;
     const user = await getUserById(userId);
     if (!user) {
       return { success: false, message: "Invalid credentials!" };
@@ -20,26 +37,10 @@ export const createWebniar = async (
       return { success: false, errors: result.error.flatten().fieldErrors };
     }
 
-    const {
-      title,
-      instructor,
-      instructorTitle,
-      date,
-      time,
-      duration,
-      description,
-      level,
-      maxAttendees,
-      price,
-      categoryId,
-      status,
-    } = result.data;
-
     await prisma.webniar.create({
       data: {
         title,
-        instructor,
-        instructorTitle,
+        instructorId,
         date: new Date(date),
         time,
         duration,
@@ -47,10 +48,10 @@ export const createWebniar = async (
         level,
         maxAttendees: Number(maxAttendees),
         price,
-        categoryId,
+
         creatorId: userId,
         status,
-        category: categoryId,
+        category,
       },
     });
 
@@ -68,8 +69,8 @@ export const getWebniarById = async (webniarId: string) => {
         id: webniarId,
       },
       include: {
-        Category: true,
         creator: true,
+        instructor: true,
         attendees: {
           include: {
             user: true, // attendee ka user data bhi chahiye to
@@ -96,7 +97,7 @@ export const getAllWebniars = async () => {
         createdAt: "desc",
       },
       include: {
-        Category: true, // category ka title bhi chahiye to
+        instructor: true,
         creator: true, // webinar creator ka data bhi chahiye to
         attendees: true, // attendees ka list
       },
@@ -134,8 +135,6 @@ export const updateWebniar = async (
 
     const {
       title,
-      instructor,
-      instructorTitle,
       date,
       time,
       duration,
@@ -143,7 +142,7 @@ export const updateWebniar = async (
       level,
       maxAttendees,
       price,
-      categoryId,
+      category,
       status,
     } = result.data;
 
@@ -152,8 +151,6 @@ export const updateWebniar = async (
       where: { id: webniarId },
       data: {
         title,
-        instructor,
-        instructorTitle,
         date: new Date(date),
         time,
         duration,
@@ -161,7 +158,7 @@ export const updateWebniar = async (
         level,
         maxAttendees: Number(maxAttendees),
         price,
-        categoryId,
+        category,
         status,
       },
     });

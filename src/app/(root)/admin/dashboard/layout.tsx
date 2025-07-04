@@ -1,4 +1,4 @@
-import { AdminSidebar1 } from "@/components/admin/admin-sidebar";
+import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import AdminUpper from "@/components/admin/admin-upper";
 import React from "react";
 
@@ -9,7 +9,7 @@ const layout = ({
 }>) => {
   return (
     <div className="min-h-screen bg-gray-900 flex">
-      <AdminSidebar1 />
+      <AdminSidebar />
 
       <div className="flex-1 flex flex-col">
         <AdminUpper />

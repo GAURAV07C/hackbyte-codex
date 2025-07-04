@@ -14,8 +14,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 enum WebniarStatus {
   LIVE
   UPCOMING
@@ -36,8 +34,9 @@ model User {
   accounts        Account[]
   webinarsCreated Webniar[]         @relation("WebniarCreator")
   webinarsJoined  WebniarAttendee[]
-  
-  categoriesCreated Category[] @relation("CategoryCreator")
+
+  // categoriesCreated Category[]  @relation("CategoryCreator")
+  instructorInfo Instructor? @relation("UserInstructor")
 }
 
 model Account {
@@ -79,31 +78,30 @@ model PasswordResetToken {
 }
 
 model Webniar {
-  id              String   @id @default(cuid())
-  title           String
-  instructor      String
-  instructorTitle String
-  date            DateTime
-  time            String
-  duration        String
-  description     String
-  category        String
-  level           String
-  maxAttendees    Int
-  price           String   @default("Free")
-    status          WebniarStatus  @default(UPCOMING)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id           String        @id @default(cuid())
+  title        String
+  date         DateTime
+  time         String
+  duration     String
+  description  String
+  level        String
+  maxAttendees Int
+  category     String
+  price        String        @default("Free")
+  status       WebniarStatus @default(UPCOMING)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 
   creatorId String
   creator   User   @relation("WebniarCreator", fields: [creatorId], references: [id])
 
- 
-  Category   Category?         @relation(fields: [categoryId], references: [id])
-  categoryId String?
+  // Category   Category? @relation(fields: [categoryId], references: [id])
+  // categoryId String?
 
-   attendees  WebniarAttendee[]
-  
+  attendees WebniarAttendee[]
+
+  instructorId String
+  instructor   Instructor @relation("WebniarInstructor", fields: [instructorId], references: [id])
 }
 
 model WebniarAttendee {
@@ -117,11 +115,30 @@ model WebniarAttendee {
   @@unique([userId, webniarId])
 }
 
-model Category {
-  id        String    @id @default(cuid())
-  title     String    @unique
-  createdAt DateTime  @default(now())
-  createdBy String
-  creator   User      @relation("CategoryCreator", fields: [createdBy], references: [id])
-  webinars  Webniar[]
+// model Category {
+//   id        String    @id @default(cuid())
+//   title     String    @unique
+//   createdAt DateTime  @default(now())
+//   createdBy String
+//   creator   User      @relation("CategoryCreator", fields: [createdBy], references: [id])
+//   webinars  Webniar[]
+// }
+
+model Instructor {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  title             String
+  specialization    String
+  joinedDate        DateTime @default(now())
+  totalWebinars     Int      @default(0)
+  totalStudents     Int      @default(0)
+  rating            Float    @default(0)
+  status            String   @default("active")
+  bio               String
+  upcomingWebinars  Int      @default(0)
+  completedWebinars Int      @default(0)
+
+  user User @relation("UserInstructor", fields: [userId], references: [id])
+
+  webinarsHosted Webniar[] @relation("WebniarInstructor")
 }
