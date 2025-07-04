@@ -1,11 +1,22 @@
-import React from 'react'
+import { AdminSidebar1 } from "@/components/admin/admin-sidebar";
+import AdminUpper from "@/components/admin/admin-upper";
+import React from "react";
 
-const layout = () => {
+const layout = ({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) => {
   return (
-    <div>
-      
-    </div>
-  )
-}
+    <div className="min-h-screen bg-gray-900 flex">
+      <AdminSidebar1 />
 
-export default layout
+      <div className="flex-1 flex flex-col">
+        <AdminUpper />
+        <main className="flex-1 p-6 overflow-auto">{children}</main>
+      </div>
+    </div>
+  );
+};
+
+export default layout;

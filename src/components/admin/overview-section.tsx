@@ -9,7 +9,7 @@ import { Video, Users, TrendingUp, Calendar, DollarSign, Activity, UserPlus, Plu
 import { motion } from "framer-motion"
 
 
-export function AdminOverviewTab() {
+export function AdminOverviewSection() {
   const webinars: any[] = []
   const users: any[] = []
 

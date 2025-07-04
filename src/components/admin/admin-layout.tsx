@@ -1,9 +1,13 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { Separator } from "@/components/ui/separator"
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,18 +15,22 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { AdminSidebar } from "./admin-sidebar"
-import { Shield } from "lucide-react"
+} from "@/components/ui/breadcrumb";
+import { AdminSidebar } from "./admin-sidebar";
+import { Shield } from "lucide-react";
 
 interface AdminLayoutProps {
-  children: React.ReactNode
-  activeTab: string
-  onTabChange: (tab: string) => void
+  children: React.ReactNode;
+  activeTab: string;
+  onTabChange: (tab: string) => void;
 }
 
-export function AdminLayout({ children, activeTab, onTabChange }: AdminLayoutProps) {
-  const user: { name: string } = { name: "Admin" }
+export function AdminLayout({
+  children,
+  activeTab,
+  onTabChange,
+}: AdminLayoutProps) {
+  const user: { name: string } = { name: "Admin" };
 
   const getTabTitle = (tab: string) => {
     const titles: Record<string, string> = {
@@ -34,9 +42,9 @@ export function AdminLayout({ children, activeTab, onTabChange }: AdminLayoutPro
       content: "Content Management",
       notifications: "Notifications",
       settings: "Settings",
-    }
-    return titles[tab] || "Dashboard"
-  }
+    };
+    return titles[tab] || "Dashboard";
+  };
 
   return (
     <SidebarProvider>
@@ -45,17 +53,25 @@ export function AdminLayout({ children, activeTab, onTabChange }: AdminLayoutPro
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 bg-gray-800 border-b border-gray-700 px-4">
           <div className="flex items-center gap-2">
             <SidebarTrigger className="-ml-1 text-gray-400 hover:text-white" />
-            <Separator orientation="vertical" className="mr-2 h-4 bg-gray-600" />
+            <Separator
+              orientation="vertical"
+              className="mr-2 h-4 bg-gray-600"
+            />
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#" className="text-gray-400 hover:text-white">
+                  <BreadcrumbLink
+                    href="#"
+                    className="text-gray-400 hover:text-white"
+                  >
                     Admin Panel
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block text-gray-600" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage className="text-white font-semibold">{getTabTitle(activeTab)}</BreadcrumbPage>
+                  <BreadcrumbPage className="text-white font-semibold">
+                    {getTabTitle(activeTab)}
+                  </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -82,9 +98,11 @@ export function AdminLayout({ children, activeTab, onTabChange }: AdminLayoutPro
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0 bg-gray-900 min-h-screen">
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-gray-900 p-4">{children}</div>
+          <div className="min-h-[100vh] flex-1 rounded-xl bg-gray-900 p-4">
+            {children}
+          </div>
         </div>
       </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }

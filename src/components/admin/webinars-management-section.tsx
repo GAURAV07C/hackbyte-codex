@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
-import { useState } from "react"
+import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -37,10 +37,16 @@ import {
   AlertCircle,
 } from "lucide-react"
 import { motion } from "framer-motion"
-import { useAdmin } from "@/lib/admin-context"
 
-export function WebinarsManagementTab() {
-  const { webinars, addWebinar, updateWebinar, deleteWebinar } = useAdmin()
+
+export function WebinarsManagementSection() {
+  // Temporary local state for webinars management (replace with your actual data fetching logic)
+  const [webinars, setWebinars] = useState<any[]>([])
+
+  const addWebinar = (webinar: any) => setWebinars((prev) => [...prev, { ...webinar, id: Date.now() }])
+  const updateWebinar = (id: number, updated: any) =>
+    setWebinars((prev) => prev.map((w) => (w.id === id ? { ...w, ...updated } : w)))
+  const deleteWebinar = (id: number) => setWebinars((prev) => prev.filter((w) => w.id !== id))
   const [searchTerm, setSearchTerm] = useState("")
   const [filterStatus, setFilterStatus] = useState("all")
   const [filterCategory, setFilterCategory] = useState("all")
@@ -172,7 +178,7 @@ export function WebinarsManagementTab() {
     }
   }
 
-  const filteredWebinars = webinars.filter((webinar) => {
+  const filteredWebinars = webinars.filter((webinar: { title: string; instructor: string; category: string; status: string }) => {
     const matchesSearch =
       webinar.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       webinar.instructor.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -184,13 +190,13 @@ export function WebinarsManagementTab() {
 
   const stats = {
     total: webinars.length,
-    live: webinars.filter((w) => w.status === "live").length,
-    upcoming: webinars.filter((w) => w.status === "upcoming").length,
-    completed: webinars.filter((w) => w.status === "completed").length,
-    totalRegistrations: webinars.reduce((sum, w) => sum + w.registered, 0),
+    live: webinars.filter((w: { status: string }) => w.status === "live").length,
+    upcoming: webinars.filter((w: { status: string }) => w.status === "upcoming").length,
+    completed: webinars.filter((w: { status: string }) => w.status === "completed").length,
+    totalRegistrations: webinars.reduce((sum: any, w: { registered: any }) => sum + w.registered, 0),
   }
 
-  const categories = [...new Set(webinars.map((w) => w.category))].filter(Boolean)
+  const categories = [...new Set(webinars.map((w: { category: any }) => w.category))].filter(Boolean)
 
   return (
     <div className="space-y-6">
@@ -516,7 +522,7 @@ export function WebinarsManagementTab() {
 
       {/* Webinars List */}
       <div className="space-y-4">
-        {filteredWebinars.map((webinar, index) => (
+        {filteredWebinars.map((webinar: { id: Key | null | undefined; status: string; category: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; level: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; title: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; description: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; instructorImage: any; instructor: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; instructorTitle: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; date: string | number | Date; time: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; registered: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; maxAttendees: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; price: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; meetingLink: string }, index: number) => (
           <motion.div
             key={webinar.id}
             initial={{ opacity: 0, y: 20 }}
@@ -544,12 +550,14 @@ export function WebinarsManagementTab() {
 
                     <div className="flex items-center mb-3">
                       <Avatar className="mr-3 w-10 h-10">
-                        <AvatarImage src={webinar.instructorImage || "/placeholder.svg"} alt={webinar.instructor} />
+                        <AvatarImage src={webinar.instructorImage || "/placeholder.svg"} alt={typeof webinar.instructor === "string" ? webinar.instructor : undefined} />
                         <AvatarFallback className="bg-red-600 text-white">
-                          {webinar.instructor
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
+                          {typeof webinar.instructor === "string"
+                            ? webinar.instructor
+                                .split(" ")
+                                .map((n: string) => n[0])
+                                .join("")
+                            : ""}
                         </AvatarFallback>
                       </Avatar>
                       <div>
@@ -577,7 +585,13 @@ export function WebinarsManagementTab() {
                         <div className="ml-2 w-16 bg-gray-700 rounded-full h-2">
                           <div
                             className="bg-blue-500 h-2 rounded-full"
-                            style={{ width: `${(webinar.registered / webinar.maxAttendees) * 100}%` }}
+                            style={{
+                              width: `${
+                                Number(webinar.maxAttendees)
+                                  ? (Number(webinar.registered ?? 0) / Number(webinar.maxAttendees)) * 100
+                                  : 0
+                              }%`
+                            }}
                           />
                         </div>
                       </div>
@@ -638,7 +652,7 @@ export function WebinarsManagementTab() {
                         {webinar.status === "upcoming" && (
                           <DropdownMenuItem
                             className="text-green-400 hover:text-green-300 hover:bg-gray-700"
-                            onClick={() => handleChangeStatus(webinar.id, "live")}
+                            onClick={() => handleChangeStatus(Number(webinar.id), "live")}
                           >
                             <Play className="w-4 h-4 mr-2" />
                             Start Live
@@ -647,7 +661,7 @@ export function WebinarsManagementTab() {
                         {webinar.status === "live" && (
                           <DropdownMenuItem
                             className="text-yellow-400 hover:text-yellow-300 hover:bg-gray-700"
-                            onClick={() => handleChangeStatus(webinar.id, "completed")}
+                            onClick={() => handleChangeStatus(Number(webinar.id), "completed")}
                           >
                             <Pause className="w-4 h-4 mr-2" />
                             End Session
@@ -659,7 +673,7 @@ export function WebinarsManagementTab() {
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="text-red-400 hover:text-red-300 hover:bg-gray-700"
-                          onClick={() => handleDeleteWebinar(webinar.id, webinar.title)}
+                          onClick={() => handleDeleteWebinar(Number(webinar.id),  String(webinar.title ?? "") )}
                         >
                           <Trash2 className="w-4 h-4 mr-2" />
                           Delete

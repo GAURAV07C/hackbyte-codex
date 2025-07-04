@@ -50,10 +50,16 @@ import {
   Download,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { useAdmin } from "@/lib/admin-context";
+
 
 export function UsersManagementTab() {
-  const { users, addUser, updateUser, deleteUser } = useAdmin();
+  // Mock users state and handlers for demonstration
+  const [users, setUsers] = useState<any[]>([]);
+  const addUser = (user: any) => setUsers((prev) => [...prev, { ...user, id: Date.now() }]);
+  const updateUser = (id: number, updated: any) =>
+    setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, ...updated } : u)));
+  const deleteUser = (id: number) =>
+    setUsers((prev) => prev.filter((u) => u.id !== id));
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -468,7 +474,7 @@ export function UsersManagementTab() {
                       <AvatarFallback className="bg-gray-600 text-white">
                         {user.name
                           .split(" ")
-                          .map((n) => n[0])
+                          .map((n: any[]) => n[0])
                           .join("")}
                       </AvatarFallback>
                     </Avatar>

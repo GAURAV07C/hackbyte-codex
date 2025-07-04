@@ -1,21 +1,6 @@
-"use client"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarRail,
-  SidebarSeparator,
-} from "@/components/ui/sidebar"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+"use client";
+
+import { siteData } from "@/data/site-data";
 import {
   LayoutDashboard,
   Video,
@@ -26,160 +11,220 @@ import {
   Bell,
   Settings,
   LogOut,
-  Shield,
   Activity,
   ChevronUp,
   User2,
-} from "lucide-react"
+} from "lucide-react";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 
-interface AdminSidebarProps {
-  activeTab: string
-  onTabChange: (tab: string) => void
-}
+import { useSession } from "next-auth/react";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
 
 const navigationItems = [
   {
     title: "Dashboard",
     items: [
-      { id: "overview", label: "Overview", icon: LayoutDashboard, color: "text-blue-400" },
-      { id: "analytics", label: "Analytics", icon: BarChart3, color: "text-pink-400" },
+      {
+        id: "overview",
+        label: "Overview",
+        icon: LayoutDashboard,
+        color: "text-blue-400",
+        link: "/admin/dashboard",
+      },
+      {
+        id: "analytics",
+        label: "Analytics",
+        icon: BarChart3,
+        color: "text-pink-400",
+        link: "/admin/dashboard/analytics",
+      },
     ],
   },
   {
     title: "Management",
     items: [
-      { id: "webinars", label: "Webinars", icon: Video, color: "text-green-400" },
-      { id: "users", label: "Users", icon: Users, color: "text-purple-400" },
-      { id: "instructors", label: "Instructors", icon: GraduationCap, color: "text-yellow-400" },
-      { id: "content", label: "Content", icon: FileText, color: "text-indigo-400" },
+      {
+        id: "webinars",
+        label: "Webinars",
+        icon: Video,
+        color: "text-green-400",
+        link: "/admin/dashboard/webniars",
+      },
+      {
+        id: "users",
+        label: "Users",
+        icon: Users,
+        color: "text-purple-400",
+        link: "/admin/dashboard/user",
+      },
+      {
+        id: "instructors",
+        label: "Instructors",
+        icon: GraduationCap,
+        color: "text-yellow-400",
+        link: "/admin/dashboard/instructors",
+      },
+      {
+        id: "content",
+        label: "Content",
+        icon: FileText,
+        color: "text-indigo-400",
+        link: "/admin/dashboard/content",
+      },
     ],
   },
   {
     title: "System",
     items: [
-      { id: "notifications", label: "Notifications", icon: Bell, color: "text-orange-400" },
-      { id: "settings", label: "Settings", icon: Settings, color: "text-gray-400" },
+      {
+        id: "notifications",
+        label: "Notifications",
+        icon: Bell,
+        color: "text-orange-400",
+        link: "/admin/dashboard/notification",
+      },
+      {
+        id: "settings",
+        label: "Settings",
+        icon: Settings,
+        color: "text-gray-400",
+        link: "/admin/dashboard/setting",
+      },
     ],
   },
-]
+];
 
-export function AdminSidebar({ activeTab, onTabChange }: AdminSidebarProps) {
-  // TODO: Replace with actual user context or props
-  const user = { name: "Admin", avatar: "" }
-  const logout = () => { /* implement logout logic */ }
+export function AdminSidebar1() {
+  const pathname = usePathname();
+  const { data: session } = useSession();
+
+  const user = session?.user;
+  const logout = () => {
+    /* implement logout logic */
+  };
 
   return (
-    <Sidebar variant="inset">
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <div className="flex items-center space-x-3 px-2 py-3">
-              <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
-                <Shield className="text-white h-6 w-6" />
-              </div>
-              <div>
-                <span className="text-white font-bold text-lg">SkillSphere</span>
-                <div className="text-xs text-red-400 font-semibold">Admin Panel</div>
-              </div>
+    <div className="w-64 bg-gray-800 border-r border-gray-700 flex flex-col">
+      {/* Header */}
+      <div className="p-6 border-b border-gray-700">
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+            <Image src={"/logo.png"} alt="logo" width={90} height={90} />
+          </div>
+          <div>
+            <span className="text-xl font-bold text-white">
+              {siteData.company.name}
+            </span>
+            <div className="text-xs text-red-400 font-semibold">
+              Admin Panel
             </div>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
+          </div>
+        </div>
+      </div>
 
-      <SidebarContent>
+      <div className="p-6 border-b border-gray-700">
+        <div className="flex items-center space-x-3">
+          <Avatar className="w-12 h-12">
+            <AvatarImage
+              src={user?.image || "/placeholder.svg"}
+              alt={user?.name ?? undefined}
+            />
+            <AvatarFallback className="bg-blue-600 text-white">
+              {user?.name?.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <p className="text-white font-semibold">{user?.name}</p>
+            <p className="text-gray-400 text-sm">{user?.email}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <div className="flex-1 overflow-y-auto">
         {navigationItems.map((section) => (
-          <SidebarGroup key={section.title}>
-            <SidebarGroupLabel className="text-gray-400 font-semibold">{section.title}</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {section.items.map((item) => {
-                  const Icon = item.icon
-                  return (
-                    <SidebarMenuItem key={item.id}>
-                      <SidebarMenuButton
-                        asChild
-                        isActive={activeTab === item.id}
-                        className={`transition-all duration-200 ${
-                          activeTab === item.id
-                            ? "bg-red-600 text-white hover:bg-red-700"
-                            : "text-gray-300 hover:text-white hover:bg-gray-700"
+          <div key={section.title} className="px-4">
+            <div className="text-gray-400 font-semibold text-xs uppercase my-2">
+              {section.title}
+            </div>
+            <ul>
+              {section.items.map((item) => {
+                const Icon = item.icon;
+                const isActive = pathname === item.id;
+                return (
+                  <Link href={item.link} key={item.id}>
+                    <li>
+                      <button
+                        className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm ${
+                          isActive
+                            ? "bg-blue-600 text-white"
+                            : "text-gray-300 hover:bg-gray-700 hover:text-white"
                         }`}
-                        onClick={() => onTabChange(item.id)}
                       >
-                        <button className="w-full flex items-center">
-                          <Icon className={`h-4 w-4 ${activeTab === item.id ? "text-white" : item.color}`} />
-                          <span>{item.label}</span>
-                        </button>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  )
-                })}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+                        <Icon
+                          className={`h-4 w-4 ${
+                            isActive ? "text-white" : item.color
+                          }`}
+                        />
+                        <span>{item.label}</span>
+                      </button>
+                    </li>
+                  </Link>
+                );
+              })}
+            </ul>
+          </div>
         ))}
-      </SidebarContent>
+      </div>
 
-      <SidebarSeparator />
+      {/* Footer */}
+      <div className="px-4 pb-4">
+        <div className="flex items-center space-x-2 mb-2">
+          <Activity className="h-4 w-4 text-green-400" />
+          <span className="text-green-400 text-sm font-medium">
+            System Online
+          </span>
+        </div>
+        <div className="text-xs text-gray-400 space-y-1 mb-4">
+          <div>Uptime: 99.9%</div>
+          <div>Last backup: 2 hours ago</div>
+        </div>
 
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <div className="flex items-center space-x-2 px-2 py-2 mb-2">
-              <Activity className="h-4 w-4 text-green-400" />
-              <span className="text-green-400 text-sm font-medium">System Online</span>
+        {/* User Menu */}
+        <div className="relative group">
+          <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm bg-gray-800 hover:bg-gray-700 text-white">
+            <div className="h-8 w-8 rounded-lg bg-red-600 flex items-center justify-center text-white text-sm font-semibold">
+              {user?.name?.charAt(0)?.toUpperCase() ?? ""}
             </div>
-            <div className="text-xs text-gray-400 px-2 space-y-1 mb-4">
-              <div>Uptime: 99.9%</div>
-              <div>Last backup: 2 hours ago</div>
+            <div className="flex-1 text-left">
+              <div className="font-semibold">{user?.name}</div>
+              <span className="bg-red-600 text-xs text-white rounded px-1">
+                Admin
+              </span>
             </div>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton
-                  size="lg"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                >
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage src={user?.avatar || "/placeholder.svg"} alt={user?.name} />
-                    <AvatarFallback className="rounded-lg bg-red-600 text-white">
-                      {user?.name?.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">{user?.name}</span>
-                    <div className="flex items-center space-x-2">
-                      <Badge className="bg-red-600 text-white text-xs">Admin</Badge>
-                    </div>
-                  </div>
-                  <ChevronUp className="ml-auto size-4" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg bg-gray-800 border-gray-700"
-                side="bottom"
-                align="end"
-                sideOffset={4}
-              >
-                <DropdownMenuItem className="text-gray-300 hover:text-white hover:bg-gray-700">
-                  <User2 className="mr-2 h-4 w-4" />
-                  Account
-                </DropdownMenuItem>
-                <DropdownMenuItem className="text-gray-300 hover:text-white hover:bg-gray-700">
-                  <Settings className="mr-2 h-4 w-4" />
-                  Settings
-                </DropdownMenuItem>
-                <DropdownMenuItem className="text-red-400 hover:text-red-300 hover:bg-gray-700" onClick={logout}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Log out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
-      <SidebarRail />
-    </Sidebar>
-  )
+            <ChevronUp className="h-4 w-4" />
+          </button>
+
+          {/* Dropdown */}
+          <div className="absolute bottom-12 right-0 hidden group-hover:block bg-gray-800 rounded-lg shadow-lg w-48">
+            <button className="flex items-center w-full px-3 py-2 text-gray-300 hover:bg-gray-700 hover:text-white text-sm">
+              <User2 className="h-4 w-4 mr-2" /> Account
+            </button>
+            <button className="flex items-center w-full px-3 py-2 text-gray-300 hover:bg-gray-700 hover:text-white text-sm">
+              <Settings className="h-4 w-4 mr-2" /> Settings
+            </button>
+            <button
+              onClick={logout}
+              className="flex items-center w-full px-3 py-2 text-red-400 hover:bg-gray-700 hover:text-red-300 text-sm"
+            >
+              <LogOut className="h-4 w-4 mr-2" /> Log out
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

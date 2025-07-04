@@ -14,17 +14,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+
+enum WebniarStatus {
+  LIVE
+  UPCOMING
+  COMPLETED
+  CANCELED
+}
+
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  userName      String?   @unique
-  image         String?
-  password      String?
-  createdAt     DateTime  @default(now())
-  emailVerified DateTime?
-  updatedAt     DateTime  @updatedAt
-  accounts      Account[]
+  id              String            @id @default(cuid())
+  name            String?
+  email           String?           @unique
+  userName        String?           @unique
+  image           String?
+  password        String?
+  createdAt       DateTime          @default(now())
+  emailVerified   DateTime?
+  updatedAt       DateTime          @updatedAt
+  accounts        Account[]
+  webinarsCreated Webniar[]         @relation("WebniarCreator")
+  webinarsJoined  WebniarAttendee[]
+  
+  categoriesCreated Category[] @relation("CategoryCreator")
 }
 
 model Account {
@@ -63,4 +76,52 @@ model PasswordResetToken {
   expires DateTime
 
   @@unique([email, token])
+}
+
+model Webniar {
+  id              String   @id @default(cuid())
+  title           String
+  instructor      String
+  instructorTitle String
+  date            DateTime
+  time            String
+  duration        String
+  description     String
+  category        String
+  level           String
+  maxAttendees    Int
+  price           String   @default("Free")
+    status          WebniarStatus  @default(UPCOMING)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  creatorId String
+  creator   User   @relation("WebniarCreator", fields: [creatorId], references: [id])
+
+ 
+  Category   Category?         @relation(fields: [categoryId], references: [id])
+  categoryId String?
+
+   attendees  WebniarAttendee[]
+  
+}
+
+model WebniarAttendee {
+  id        String   @id @default(cuid())
+  userId    String
+  webniarId String
+  joinedAt  DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  webniar   Webniar  @relation(fields: [webniarId], references: [id])
+
+  @@unique([userId, webniarId])
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  title     String    @unique
+  createdAt DateTime  @default(now())
+  createdBy String
+  creator   User      @relation("CategoryCreator", fields: [createdBy], references: [id])
+  webinars  Webniar[]
 }

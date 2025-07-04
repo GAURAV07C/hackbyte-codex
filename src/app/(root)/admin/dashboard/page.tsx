@@ -1,11 +1,12 @@
+import { AdminOverviewSection } from "@/components/admin/overview-section";
 import React from "react";
 
-const page = ({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) => {
-  return <div>{children}</div>;
+const page = () => {
+  return (
+    <div>
+      <AdminOverviewSection />
+    </div>
+  );
 };
 
 export default page;

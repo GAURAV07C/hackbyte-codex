@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "postinstall": "npm rebuild",
+   
     "start": "next start",
     "lint": "next lint",
     "db:migrate": "npx prisma migrate dev",
