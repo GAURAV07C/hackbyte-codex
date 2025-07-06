@@ -86,6 +86,7 @@ model Webniar {
   description  String
   level        String
   maxAttendees Int
+  linl         String?
   category     String
   price        String        @default("Free")
   status       WebniarStatus @default(UPCOMING)

@@ -278,7 +278,6 @@ export function WebinarsManagementTab() {
   };
 
   const handleChangeStatus = (id: number, newStatus: string) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     updateWebinar(id, { status: newStatus as any });
     toast({
       title: "Status Updated",
@@ -385,7 +384,7 @@ export function WebinarsManagementTab() {
                     </Label>
                     <Select
                       value={newWebinar.category}
-                      onValueChange={(value) =>
+                      onValueChange={(value: any) =>
                         setNewWebinar((prev) => ({ ...prev, category: value }))
                       }
                     >
@@ -504,7 +503,7 @@ export function WebinarsManagementTab() {
                     </Label>
                     <Select
                       value={newWebinar.level}
-                      onValueChange={(value) =>
+                      onValueChange={(value: any) =>
                         setNewWebinar((prev) => ({ ...prev, level: value }))
                       }
                     >
@@ -945,7 +944,7 @@ export function WebinarsManagementTab() {
                   </Label>
                   <Select
                     value={editingWebinar.category}
-                    onValueChange={(value) =>
+                    onValueChange={(value: any) =>
                       setEditingWebinar((prev: any) => ({
                         ...prev,
                         category: value,

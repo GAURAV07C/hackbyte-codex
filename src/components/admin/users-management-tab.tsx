@@ -271,7 +271,7 @@ export function UsersManagementTab() {
                   </Label>
                   <Select
                     value={newUser.role}
-                    onValueChange={(value) =>
+                    onValueChange={(value: any) =>
                       setNewUser((prev) => ({ ...prev, role: value }))
                     }
                   >
@@ -291,7 +291,7 @@ export function UsersManagementTab() {
                   </Label>
                   <Select
                     value={newUser.status}
-                    onValueChange={(value) =>
+                    onValueChange={(value: any) =>
                       setNewUser((prev) => ({ ...prev, status: value }))
                     }
                   >
@@ -651,7 +651,7 @@ export function UsersManagementTab() {
                 </Label>
                 <Select
                   value={editingUser.role}
-                  onValueChange={(value) =>
+                  onValueChange={(value: any) =>
                     setEditingUser((prev: any) => ({ ...prev, role: value }))
                   }
                 >
@@ -671,7 +671,7 @@ export function UsersManagementTab() {
                 </Label>
                 <Select
                   value={editingUser.status}
-                  onValueChange={(value) =>
+                  onValueChange={(value: any) =>
                     setEditingUser((prev: any) => ({ ...prev, status: value }))
                   }
                 >

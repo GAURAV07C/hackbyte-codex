@@ -32,7 +32,6 @@ export function WebinarsCreateScetion() {
 
   const { data: session } = useSession();
   const userId = session?.user?.id;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [instructors, setInstructors] = useState<any[]>([]);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [selectedInstructor, setSelectedInstructor] = useState<any | null>(
@@ -174,7 +173,7 @@ export function WebinarsCreateScetion() {
                 </Label>
                 <Select
                   value={newWebinar.category}
-                  onValueChange={(value) =>
+                  onValueChange={(value: any) =>
                     setNewWebinar((prev) => ({ ...prev, category: value }))
                   }
                 >
@@ -302,7 +301,7 @@ export function WebinarsCreateScetion() {
                 </Label>
                 <Select
                   value={newWebinar.level}
-                  onValueChange={(value) =>
+                  onValueChange={(value: any) =>
                     setNewWebinar((prev) => ({ ...prev, level: value }))
                   }
                 >

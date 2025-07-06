@@ -22,7 +22,7 @@ import { reset } from "@/actions/authAction";
 
 const ResetForm = () => {
   const [error, setError] = useState<string | undefined>("");
-  const [sucess, setSucess] = useState<string | undefined>("");
+  const [sucess, setSucess] = useState<string | boolean | undefined>("");
   const [isPending, startTransition] = useTransition();
   const form = useForm<z.infer<typeof ResetSchema>>({
     resolver: zodResolver(ResetSchema),
@@ -38,8 +38,8 @@ const ResetForm = () => {
 
     startTransition(() => {
       reset(values).then((data) => {
-        setError(data?.error);
-        setSucess(data?.sucess);
+        setError(data?.message);
+        setSucess(data?.success);
       });
     });
   };
@@ -75,7 +75,7 @@ const ResetForm = () => {
               />
             </div>
             <FormError message={error} />
-            <FormSucess message={sucess} />
+            <FormSucess message={sucess as string} />
             <Button type="submit" className="w-full" disabled={isPending}>
               Send reset email
             </Button>

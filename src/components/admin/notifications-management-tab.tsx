@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import { useState } from "react"
@@ -215,7 +216,7 @@ export function NotificationsManagementTab() {
                   </Label>
                   <Select
                     value={newNotification.type}
-                    onValueChange={(value) => setNewNotification((prev) => ({ ...prev, type: value }))}
+                    onValueChange={(value: any) => setNewNotification((prev) => ({ ...prev, type: value }))}
                   >
                     <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
                       <SelectValue placeholder="Select type" />
@@ -234,7 +235,7 @@ export function NotificationsManagementTab() {
                   </Label>
                   <Select
                     value={newNotification.target}
-                    onValueChange={(value) => setNewNotification((prev) => ({ ...prev, target: value }))}
+                    onValueChange={(value: any) => setNewNotification((prev) => ({ ...prev, target: value }))}
                   >
                     <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
                       <SelectValue placeholder="Select target" />
