@@ -88,6 +88,21 @@ export const getRandomUsers = async (id: string) => {
   }
 };
 
+export const getAllUsers = async () =>  {
+  try {
+    const randomusers = await prisma.user.findMany();
+
+    return { success: true, data: randomusers };
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "Something went wrong!" };
+  }
+}
+
+
+
+
+
 export async function updateProfile(formData: FormData, userId: string) {
   try {
     const name = formData.get("name") as string;
@@ -106,3 +121,23 @@ export async function updateProfile(formData: FormData, userId: string) {
     return { success: false, error: "Failed to update profile" };
   }
 }
+
+
+
+
+
+
+//  useEffect(() => {
+//     async function fetchInstructors() {
+//       const result = await getAllWebniars();
+//       console.log("data", result?.webniars);
+
+//       if (result && result.success && Array.isArray(result.webniars)) {
+//         setWebinars(result.webniars);
+//       }
+//     }
+
+//     fetchInstructors();
+//   }, []);
+
+//   console.log("wejkn", webinars);

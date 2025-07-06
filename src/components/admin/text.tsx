@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -53,11 +54,9 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { getAllWebniars } from "@/actions/webniarAction";
-import { WebinarsCreateScetion } from "./webniar/createWebniar";
 
 interface Webinar {
-  id: string;
+  id: number;
   title: string;
   instructor: string;
   instructorTitle?: string;
@@ -71,69 +70,174 @@ interface Webinar {
   maxAttendees: number;
   registered: number;
   price: string;
-  status: "LIVE" | "UPCOMING" | "completed" | "cancelled";
+  status: "live" | "upcoming" | "completed" | "cancelled";
   meetingLink: string;
   createdBy?: string;
 }
 
-export function WebinarsManagementSection() {
-  const [webinars, setWebinars] = useState<Webinar[]>([]);
 
-  useEffect(() => {
-    async function fetchInstructors() {
-      const result = await getAllWebniars();
-      console.log("data", result);
+export function WebinarsManagementTab() {
+  
+    const [webinars, setWebinars] = useState<Webinar[]>([
+      {
+        id: 1,
+        title: "React Advanced Patterns",
+        instructor: "John Smith",
+        instructorTitle: "Senior React Developer, Meta",
+        instructorImage: "/placeholder.svg?height=40&width=40",
+        date: "2025-01-25",
+        time: "14:00",
+        duration: "2 hours",
+        description:
+          "Learn advanced React patterns including render props, compound components, and custom hooks.",
+        category: "Development",
+        level: "Advanced",
+        maxAttendees: 100,
+        registered: 45,
+        price: "Free",
+        status: "upcoming",
+        meetingLink: "https://meet.skillsphere.com/react-advanced-patterns",
+        createdBy: "admin",
+      },
+      {
+        id: 2,
+        title: "UI/UX Design Fundamentals",
+        instructor: "Sarah Johnson",
+        instructorTitle: "Lead Designer, Figma",
+        instructorImage: "/placeholder.svg?height=40&width=40",
+        date: "2025-01-26",
+        time: "15:00",
+        duration: "1.5 hours",
+        description:
+          "Master the fundamentals of UI/UX design with hands-on exercises.",
+        category: "Design",
+        level: "Beginner",
+        maxAttendees: 150,
+        registered: 89,
+        price: "$49",
+        status: "live",
+        meetingLink: "https://meet.skillsphere.com/ui-ux-fundamentals",
+        createdBy: "admin",
+      },
+      {
+        id: 3,
+        title: "Python Data Science Bootcamp",
+        instructor: "Mike Chen",
+        instructorTitle: "Data Scientist, Google",
+        instructorImage: "/placeholder.svg?height=40&width=40",
+        date: "2025-01-24",
+        time: "10:00",
+        duration: "3 hours",
+        description:
+          "Complete bootcamp covering Python for data science applications.",
+        category: "Data Science",
+        level: "Intermediate",
+        maxAttendees: 200,
+        registered: 156,
+        price: "$99",
+        status: "completed",
+        meetingLink: "https://meet.skillsphere.com/python-data-science",
+        createdBy: "admin",
+      },
+    ]);
+    
 
-      if (result && result.success && Array.isArray(result.webniars)) {
-        const mappedWebinars: Webinar[] = result.webniars.map((item: any) => ({
-          id: item.id,
-          title: item.title,
-          instructor: item.instructor?.user?.name || "Unknown",
-          instructorTitle: item.instructor?.specialization || "",
-          instructorImage:
-            item.instructor?.image || "/placeholder.svg?height=40&width=40",
-          date: item.date,
-          time: item.time,
-          duration: item.duration,
-          description: item.description,
-          category: item.category,
-          level: item.level,
-          maxAttendees: item.maxAttendees,
-          registered:
-            item.registered ?? (item.attendees ? item.attendees.length : 0),
-          price: item.price,
-          status: item.status,
-          meetingLink: item.meetingLink ?? "",
-          createdBy: item.creator?.name || "",
-        }));
-        setWebinars(mappedWebinars);
-      }
-    }
 
-    fetchInstructors();
-  }, []);
+    const addWebinar = (webinar: Omit<Webinar, "id">) => {
+      const newWebinar = {
+        ...webinar,
+        id: Date.now(),
+      };
+      setWebinars((prev) => [...prev, newWebinar]);
+    };
 
-  console.log("wejkn", webinars);
+    const updateWebinar = (id: number, updates: Partial<Webinar>) => {
+      setWebinars((prev) =>
+        prev.map((webinar) =>
+          webinar.id === id ? { ...webinar, ...updates } : webinar
+        )
+      );
+    };
 
-  const updateWebinar = (id: string, updates: Partial<Webinar>) => {
-    setWebinars((prev) =>
-      prev.map((webinar) =>
-        webinar.id === id.toString() ? { ...webinar, ...updates } : webinar
-      )
-    );
-  };
-
-  const deleteWebinar = (id: string) => {
-    setWebinars((prev) => prev.filter((webinar) => webinar.id !== id));
-  };
+    const deleteWebinar = (id: number) => {
+      setWebinars((prev) => prev.filter((webinar) => webinar.id !== id));
+    };
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingWebinar, setEditingWebinar] = useState<any>(null);
+  const [newWebinar, setNewWebinar] = useState({
+    title: "",
+    instructor: "",
+    instructorTitle: "",
+    date: "",
+    time: "",
+    duration: "",
+    description: "",
+    category: "",
+    level: "",
+    maxAttendees: "",
+    price: "Free",
+  });
+
+  const handleCreateWebinar = () => {
+    if (
+      !newWebinar.title ||
+      !newWebinar.instructor ||
+      !newWebinar.date ||
+      !newWebinar.time
+    ) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const webinar = {
+      title: newWebinar.title,
+      instructor: newWebinar.instructor,
+      instructorTitle: newWebinar.instructorTitle,
+      instructorImage: "/placeholder.svg?height=40&width=40",
+      date: newWebinar.date,
+      time: newWebinar.time,
+      duration: newWebinar.duration,
+      description: newWebinar.description,
+      category: newWebinar.category,
+      level: newWebinar.level,
+      maxAttendees: Number.parseInt(newWebinar.maxAttendees) || 100,
+      registered: 0,
+      price: newWebinar.price,
+      status: "upcoming" as const,
+      meetingLink: `https://meet.skillsphere.com/${newWebinar.title
+        .toLowerCase()
+        .replace(/\s+/g, "-")}`,
+      createdBy: "admin",
+    };
+    addWebinar(webinar);
+    setNewWebinar({
+      title: "",
+      instructor: "",
+      instructorTitle: "",
+      date: "",
+      time: "",
+      duration: "",
+      description: "",
+      category: "",
+      level: "",
+      maxAttendees: "",
+      price: "Free",
+    });
+    setIsCreateDialogOpen(false);
+    toast({
+      title: "Success",
+      description: "Webinar created successfully!",
+    });
+  };
 
   const handleEditWebinar = () => {
     if (!editingWebinar) return;
@@ -147,7 +251,7 @@ export function WebinarsManagementSection() {
     });
   };
 
-  const handleDeleteWebinar = (id: string, title: string) => {
+  const handleDeleteWebinar = (id: number, title: string) => {
     if (confirm(`Are you sure you want to delete "${title}"?`)) {
       deleteWebinar(id);
       toast({
@@ -173,7 +277,7 @@ export function WebinarsManagementSection() {
     });
   };
 
-  const handleChangeStatus = (id: string, newStatus: string) => {
+  const handleChangeStatus = (id: number, newStatus: string) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     updateWebinar(id, { status: newStatus as any });
     toast({
@@ -184,13 +288,13 @@ export function WebinarsManagementSection() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "LIVE":
+      case "live":
         return "bg-red-500 text-white animate-pulse";
-      case "UPCOMING":
+      case "upcoming":
         return "bg-blue-500 text-white";
-      case "COMPLETED":
+      case "completed":
         return "bg-green-500 text-white";
-      case "CANCELED":
+      case "cancelled":
         return "bg-gray-500 text-white";
       default:
         return "bg-gray-500 text-white";
@@ -211,8 +315,8 @@ export function WebinarsManagementSection() {
 
   const stats = {
     total: webinars.length,
-    live: webinars.filter((w) => w.status === "LIVE").length,
-    upcoming: webinars.filter((w) => w.status === "UPCOMING").length,
+    live: webinars.filter((w) => w.status === "live").length,
+    upcoming: webinars.filter((w) => w.status === "upcoming").length,
     completed: webinars.filter((w) => w.status === "completed").length,
     totalRegistrations: webinars.reduce((sum, w) => sum + w.registered, 0),
   };
@@ -239,8 +343,258 @@ export function WebinarsManagementSection() {
             <Download className="mr-2 h-4 w-4" />
             Export
           </Button>
+          <Dialog
+            open={isCreateDialogOpen}
+            onOpenChange={setIsCreateDialogOpen}
+          >
+            <DialogTrigger asChild>
+              <Button className="bg-red-600 hover:bg-red-700 text-white">
+                <Plus className="mr-2 h-4 w-4" />
+                Create New Webinar
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="bg-gray-800 border-gray-700 text-white max-w-2xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-white flex items-center">
+                  <Video className="mr-2 h-5 w-5 text-red-400" />
+                  Create New Webinar
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="title" className="text-gray-300">
+                      Title *
+                    </Label>
+                    <Input
+                      id="title"
+                      value={newWebinar.title}
+                      onChange={(e) =>
+                        setNewWebinar((prev) => ({
+                          ...prev,
+                          title: e.target.value,
+                        }))
+                      }
+                      className="bg-gray-700 border-gray-600 text-white focus:border-red-500"
+                      placeholder="Enter webinar title"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="category" className="text-gray-300">
+                      Category *
+                    </Label>
+                    <Select
+                      value={newWebinar.category}
+                      onValueChange={(value) =>
+                        setNewWebinar((prev) => ({ ...prev, category: value }))
+                      }
+                    >
+                      <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
+                        <SelectValue placeholder="Select category" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-gray-700 border-gray-600">
+                        <SelectItem value="Technology">Technology</SelectItem>
+                        <SelectItem value="Development">Development</SelectItem>
+                        <SelectItem value="Design">Design</SelectItem>
+                        <SelectItem value="Marketing">Marketing</SelectItem>
+                        <SelectItem value="Business">Business</SelectItem>
+                        <SelectItem value="Data Science">
+                          Data Science
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
 
-          <WebinarsCreateScetion />
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="instructor" className="text-gray-300">
+                      Instructor Name *
+                    </Label>
+                    <Input
+                      id="instructor"
+                      value={newWebinar.instructor}
+                      onChange={(e) =>
+                        setNewWebinar((prev) => ({
+                          ...prev,
+                          instructor: e.target.value,
+                        }))
+                      }
+                      className="bg-gray-700 border-gray-600 text-white focus:border-red-500"
+                      placeholder="Enter instructor name"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="instructorTitle" className="text-gray-300">
+                      Instructor Title
+                    </Label>
+                    <Input
+                      id="instructorTitle"
+                      value={newWebinar.instructorTitle}
+                      onChange={(e) =>
+                        setNewWebinar((prev) => ({
+                          ...prev,
+                          instructorTitle: e.target.value,
+                        }))
+                      }
+                      className="bg-gray-700 border-gray-600 text-white focus:border-red-500"
+                      placeholder="e.g., Senior Developer, Google"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <Label htmlFor="date" className="text-gray-300">
+                      Date *
+                    </Label>
+                    <Input
+                      id="date"
+                      type="date"
+                      value={newWebinar.date}
+                      onChange={(e) =>
+                        setNewWebinar((prev) => ({
+                          ...prev,
+                          date: e.target.value,
+                        }))
+                      }
+                      className="bg-gray-700 border-gray-600 text-white focus:border-red-500"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="time" className="text-gray-300">
+                      Time *
+                    </Label>
+                    <Input
+                      id="time"
+                      type="time"
+                      value={newWebinar.time}
+                      onChange={(e) =>
+                        setNewWebinar((prev) => ({
+                          ...prev,
+                          time: e.target.value,
+                        }))
+                      }
+                      className="bg-gray-700 border-gray-600 text-white focus:border-red-500"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="duration" className="text-gray-300">
+                      Duration
+                    </Label>
+                    <Input
+                      id="duration"
+                      value={newWebinar.duration}
+                      onChange={(e) =>
+                        setNewWebinar((prev) => ({
+                          ...prev,
+                          duration: e.target.value,
+                        }))
+                      }
+                      className="bg-gray-700 border-gray-600 text-white focus:border-red-500"
+                      placeholder="e.g., 2 hours"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <Label htmlFor="level" className="text-gray-300">
+                      Level
+                    </Label>
+                    <Select
+                      value={newWebinar.level}
+                      onValueChange={(value) =>
+                        setNewWebinar((prev) => ({ ...prev, level: value }))
+                      }
+                    >
+                      <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
+                        <SelectValue placeholder="Select level" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-gray-700 border-gray-600">
+                        <SelectItem value="Beginner">Beginner</SelectItem>
+                        <SelectItem value="Intermediate">
+                          Intermediate
+                        </SelectItem>
+                        <SelectItem value="Advanced">Advanced</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="maxAttendees" className="text-gray-300">
+                      Max Attendees
+                    </Label>
+                    <Input
+                      id="maxAttendees"
+                      type="number"
+                      value={newWebinar.maxAttendees}
+                      onChange={(e) =>
+                        setNewWebinar((prev) => ({
+                          ...prev,
+                          maxAttendees: e.target.value,
+                        }))
+                      }
+                      className="bg-gray-700 border-gray-600 text-white focus:border-red-500"
+                      placeholder="100"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="price" className="text-gray-300">
+                      Price
+                    </Label>
+                    <Input
+                      id="price"
+                      value={newWebinar.price}
+                      onChange={(e) =>
+                        setNewWebinar((prev) => ({
+                          ...prev,
+                          price: e.target.value,
+                        }))
+                      }
+                      className="bg-gray-700 border-gray-600 text-white focus:border-red-500"
+                      placeholder="Free or $99"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="description" className="text-gray-300">
+                    Description
+                  </Label>
+                  <Textarea
+                    id="description"
+                    value={newWebinar.description}
+                    onChange={(e) =>
+                      setNewWebinar((prev) => ({
+                        ...prev,
+                        description: e.target.value,
+                      }))
+                    }
+                    className="bg-gray-700 border-gray-600 text-white focus:border-red-500"
+                    placeholder="Enter webinar description..."
+                    rows={3}
+                  />
+                </div>
+
+                <div className="flex justify-end space-x-2 pt-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsCreateDialogOpen(false)}
+                    className="border-gray-600 text-gray-300 bg-transparent hover:bg-gray-700"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleCreateWebinar}
+                    className="bg-red-600 hover:bg-red-700 text-white"
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Create Webinar
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
@@ -512,7 +866,7 @@ export function WebinarsManagementSection() {
                           <Eye className="w-4 h-4 mr-2" />
                           View Details
                         </DropdownMenuItem>
-                        {webinar.status === "UPCOMING" && (
+                        {webinar.status === "upcoming" && (
                           <DropdownMenuItem
                             className="text-green-400 hover:text-green-300 hover:bg-gray-700"
                             onClick={() =>
@@ -523,7 +877,7 @@ export function WebinarsManagementSection() {
                             Start Live
                           </DropdownMenuItem>
                         )}
-                        {webinar.status === "LIVE" && (
+                        {webinar.status === "live" && (
                           <DropdownMenuItem
                             className="text-yellow-400 hover:text-yellow-300 hover:bg-gray-700"
                             onClick={() =>

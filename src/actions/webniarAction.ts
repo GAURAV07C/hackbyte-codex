@@ -1,3 +1,4 @@
+"use server";
 import { getUserById } from "@/data/user";
 import prisma from "@/lib/prisma";
 import { validate } from "@/lib/validate";
@@ -97,7 +98,17 @@ export const getAllWebniars = async () => {
         createdAt: "desc",
       },
       include: {
-        instructor: true,
+        instructor: {
+          include: {
+            user: {
+              select: {
+                name: true,
+                email: true,
+                image: true,
+              },
+            },
+          },
+        },
         creator: true, // webinar creator ka data bhi chahiye to
         attendees: true, // attendees ka list
       },

@@ -36,7 +36,6 @@ export const createInstructor = async (
         userId,
         title,
         specialization,
-
         bio,
       },
     });
