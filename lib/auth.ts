@@ -18,10 +18,10 @@ import authConfig from "@/lib/auth.config";
 // testprisma();
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  pages: {
-    signIn: "/",
-    error: "/auth/error",
-  },
+ // pages: {
+   // signIn: "/",
+    //error: "/auth/error",
+ // },
   // events: {
   //   async linkAccount({ user }) {
   //     const email = user.email?.split("@")[0];
@@ -81,8 +81,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   //   },
   // },
   // adapter: PrismaAdapter(prisma),
-  session: {
-    strategy: "jwt",
-  },
+//  session: {
+   // strategy: "jwt",
+// },
   ...authConfig,
 });
