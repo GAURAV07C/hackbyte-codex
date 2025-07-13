@@ -20,10 +20,10 @@ export const metadata: Metadata = {
   description:
     "Join live interactive webinars with industry experts. Learn cutting-edge skills and network with professionals worldwide.",
 
-  icon: [
-    { url: "/fav.png", type: "image/png" },
-    { url: "/favicon.ico", type: "image/x-icon" },
-  ],
+  icons: {
+  icon: "/fav.png",
+}
+
 };
 
 export default function RootLayout({
