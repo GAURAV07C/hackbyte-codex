@@ -100,7 +100,7 @@ export function LoginDialog({ children }: LoginDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] bg-gray-900 border-gray-700">
+      <DialogContent className="sm:max-w-[425px] bg-gray-900 border-gray-700 mx-auto">
         <CardWrapper
           headerLabel="Create an account "
           backButtonLabel="Already have an account?"
