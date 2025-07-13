@@ -11,7 +11,7 @@ import { SignupDialog } from "./auth/signup-dialog";
 
 export function WebinarsSection() {
 
-  const user: never[] = []
+  
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -36,16 +36,7 @@ export function WebinarsSection() {
     },
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleWebinarAction = (webinar: any) => {
-    if (user) {
-      if (webinar.status === "live") {
-        alert(`Joining live webinar: ${webinar.topic}`);
-      } else {
-        alert(`Registering for: ${webinar.topic}`);
-      }
-    }
-  };
+ 
 
   return (
     <section id="webinars" className="py-24 bg-gray-800">
@@ -152,21 +143,7 @@ export function WebinarsSection() {
                     whileTap={{ scale: 0.98 }}
                     className="mt-auto"
                   >
-                    {user ? (
-                      <Button
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm md:text-base"
-                        onClick={() => handleWebinarAction(webinar)}
-                      >
-                        {webinar.status === "live" ? (
-                          <>
-                            <Play className="w-3 md:w-4 h-3 md:h-4 mr-2" />
-                            Join Live
-                          </>
-                        ) : (
-                          "Register Now"
-                        )}
-                      </Button>
-                    ) : (
+                   
                       <SignupDialog>
                         <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm md:text-base">
                           {webinar.status === "live" ? (
@@ -179,7 +156,7 @@ export function WebinarsSection() {
                           )}
                         </Button>
                       </SignupDialog>
-                    )}
+                  
                   </motion.div>
                 </CardContent>
               </Card>

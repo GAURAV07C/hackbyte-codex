@@ -14,7 +14,7 @@ const BackButton = ({
 }:BackButtonProps) => {
   return (
     <Button
-    variant={'link'}
+    variant={'ghost'}
     className="font-normal w-full"
     size='sm'
     asChild

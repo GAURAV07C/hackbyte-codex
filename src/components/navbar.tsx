@@ -25,7 +25,7 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 0);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -44,11 +44,10 @@ export function Navbar() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled
           ? "bg-gray-900/95 backdrop-blur-sm shadow-lg border-b border-gray-800"
-          : "bg-transparent"
-      }`}
+          : "bg-gray-900"
+        }`}
     >
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
@@ -80,7 +79,7 @@ export function Navbar() {
           </motion.div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8">
+          <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8 bg-gray-900">
             {siteData.navigation.map((item, index) => (
               <motion.div
                 key={item.name}
@@ -161,7 +160,7 @@ export function Navbar() {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex items-center space-x-3 lg:hidden">
+          <div className="flex items-center space-x-3 lg:hidden ">
             <div className="flex items-center space-x-1 text-gray-400 text-xs">
               <Users className="w-3 h-3" />
               <span>12K+</span>
@@ -197,7 +196,7 @@ export function Navbar() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="lg:hidden mt-4 pb-4 border-t border-gray-800 overflow-hidden"
+              className="lg:hidden mt-4 pb-4 border-t border-gray-800 overflow-hidden "
             >
               <nav className="flex flex-col space-y-3 mt-4">
                 {siteData.navigation.map((item, index) => (
@@ -231,7 +230,7 @@ export function Navbar() {
                   ) : (
                     <>
                       <LoginDialog>
-                        <Button variant="ghost" className="justify-start">
+                        <Button variant="ghost" className="justify-start text-white ">
                           Sign In
                         </Button>
                       </LoginDialog>

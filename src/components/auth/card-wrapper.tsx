@@ -32,7 +32,7 @@ const CardWrapper = ({
           <Social />
         </CardFooter>
       )}
-      <CardFooter className="py-2 gap-y-2">
+      <CardFooter className="py-2 gap-y-2 text-white">
         <BackButton label={backButtonLabel} href={backButtonHref} />
       </CardFooter>
     </div>

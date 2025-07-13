@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Phone, ArrowRight, Calendar, Users } from 'lucide-react'
 import { motion } from "framer-motion"
+import { SignupDialog } from "./auth/signup-dialog"
 
 export function CTASection() {
   return (
@@ -14,7 +15,7 @@ export function CTASection() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <motion.div 
+            <motion.div
               className="w-2 h-2 bg-red-500 rounded-full mx-auto mb-4"
               animate={{ scale: [1, 1.2, 1] }}
               transition={{ repeat: Infinity, duration: 2 }}
@@ -55,7 +56,7 @@ export function CTASection() {
             </Card>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center mb-12 md:mb-16 px-4"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -66,15 +67,24 @@ export function CTASection() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 font-semibold text-white w-full sm:w-auto">
-                Join Live Webinar
-                <ArrowRight className="ml-2 h-5 md:h-6 w-5 md:w-6" />
-              </Button>
+              <SignupDialog>
+
+
+                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 font-semibold text-white w-full sm:w-auto">
+                  Join Live Webinar
+                  <ArrowRight className="ml-2 h-5 md:h-6 w-5 md:w-6" />
+                </Button>
+              </SignupDialog>
             </motion.div>
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
+              <SignupDialog>
+
+
+            
+
               <Button
                 variant="outline"
                 size="lg"
@@ -83,10 +93,11 @@ export function CTASection() {
                 <Phone className="h-5 md:h-6 w-5 md:w-6 mr-2" />
                 Get Reminder
               </Button>
+                </SignupDialog>
             </motion.div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="grid sm:grid-cols-3 gap-6 md:gap-8 text-center"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -105,7 +116,7 @@ export function CTASection() {
               >
                 <Card className="bg-gray-900 border border-gray-700">
                   <CardContent className="p-4 md:p-6">
-                    <motion.div 
+                    <motion.div
                       className="text-3xl md:text-4xl font-bold text-blue-400 mb-2"
                       initial={{ scale: 0 }}
                       whileInView={{ scale: 1 }}

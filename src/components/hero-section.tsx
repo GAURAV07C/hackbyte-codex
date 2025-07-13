@@ -32,12 +32,7 @@ export function HeroSection() {
     },
   };
 
-  const handleJoinWebinar = () => {
-    if (user) {
-      // Redirect to webinar room or show webinar interface
-      alert("Redirecting to live webinar...");
-    }
-  };
+
 
   const handleWatchPreview = () => {
     // Open preview video or demo
@@ -133,21 +128,7 @@ export function HeroSection() {
             variants={itemVariants}
             className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center mb-12 md:mb-20 px-4"
           >
-            {user ? (
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button
-                  size="lg"
-                  className="bg-blue-600 hover:bg-blue-700 text-white text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 font-semibold w-full sm:w-auto"
-                  onClick={handleJoinWebinar}
-                >
-                  Join Live Now
-                  <ArrowRight className="ml-2 h-4 md:h-5 w-4 md:w-5" />
-                </Button>
-              </motion.div>
-            ) : (
+           
               <SignupDialog>
                 <motion.div
                   whileHover={{ scale: 1.05 }}
@@ -162,19 +143,26 @@ export function HeroSection() {
                   </Button>
                 </motion.div>
               </SignupDialog>
-            )}
+           
+             <SignupDialog>
+
+
+             
 
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 variant="outline"
                 size="lg"
                 className="border-2 border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 font-semibold bg-transparent w-full sm:w-auto"
-                onClick={handleWatchPreview}
+              
               >
                 <Play className="w-4 md:w-5 h-4 md:h-5 mr-2" />
                 Watch Preview
               </Button>
             </motion.div>
+            </SignupDialog>
+
+
           </motion.div>
 
           {/* Stats */}
