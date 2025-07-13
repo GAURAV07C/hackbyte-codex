@@ -1,20 +1,21 @@
+
 import prisma from '@/lib/prisma'
 
 
-export const getPasswordResetTokenByToken = async (token: string) =>  {
+export const getPasswordResetTokenByToken = async (token: string) => {
 
-    try{
+  try {
 
-        const passwordToken = await prisma.passwordResetToken.findUnique({
-            where : { token},
-        
-        });
+    const passwordToken = await prisma.passwordResetToken.findUnique({
+      where: { token },
 
-        return passwordToken
+    });
 
-    } catch {
-        return null
-    }
+    return passwordToken
+
+  } catch {
+    return null
+  }
 
 }
 

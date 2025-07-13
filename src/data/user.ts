@@ -88,7 +88,7 @@ export const getRandomUsers = async (id: string) => {
   }
 };
 
-export const getAllUsers = async () =>  {
+export const getAllUsers = async () => {
   try {
     const randomusers = await prisma.user.findMany();
 
