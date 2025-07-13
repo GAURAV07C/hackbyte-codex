@@ -21,9 +21,7 @@ export const metadata: Metadata = {
   description:
     "Join live interactive webinars with industry experts. Learn cutting-edge skills and network with professionals worldwide.",
 
-  icons: {
-  icon: "/globe.svg",
-}
+
 
 };
 
