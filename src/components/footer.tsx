@@ -1,7 +1,7 @@
 import { Linkedin, Instagram, Mail, Phone, MapPin } from 'lucide-react'
 import Link from "next/link"
 import { siteData } from "@/data/site-data"
-
+import Image from "next/image";
 export function Footer() {
   return (
     <footer id="contact" className="bg-black text-white py-20 border-t border-gray-800">
@@ -9,9 +9,9 @@ export function Footer() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           <div className="sm:col-span-2">
             <div className="flex items-center space-x-3 mb-4 md:mb-6">
-              <div className="w-10 md:w-12 h-10 md:h-12 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg md:text-xl">S</span>
-              </div>
+              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+              <Image src={"/fav.png"} alt="logo" width={90} height={90} />
+            </div>
               <div>
                 <span className="text-xl md:text-2xl font-bold text-white">{siteData.company.name}</span>
                 <div className="text-xs md:text-sm text-gray-400">{siteData.company.tagline}</div>
