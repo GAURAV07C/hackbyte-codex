@@ -10,7 +10,7 @@ const layout = ({
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col md:flex-row">
       {/* Sidebar - hide on small screens, show toggle if needed */}
-      <div className="md:block hidden">
+      <div className="">
         <DashboardSidebar />
       </div>
 
