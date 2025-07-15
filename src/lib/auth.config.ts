@@ -1,10 +1,10 @@
-// import Credentials from "next-auth/providers/credentials";
+import Credentials from "next-auth/providers/credentials";
 
 import Google from "next-auth/providers/google";
-// import bcrypt from "bcryptjs";
+import bcrypt from "bcryptjs";
 import type { NextAuthConfig } from "next-auth";
-// import { LoginSchema } from "@/schemas/AuthSchema";
-// import { getUserByEmail } from "@/data/user";
+import { LoginSchema } from "@/schemas/AuthSchema";
+import { getUserByEmail } from "@/data/user";
 // Notice this is only an object, not a full Auth.js instance
 export default {
   providers: [
@@ -19,24 +19,25 @@ export default {
         },
       },
     }),
-    // Credentials({
-    //   async authorize(credentials) {
-    //     const validatedFields = LoginSchema.safeParse(credentials);
+    Credentials({
+      async authorize(credentials) {
+        const validatedFields = LoginSchema.safeParse(credentials);
 
-    //     if (validatedFields.success) {
-    //       const { email, password } = validatedFields.data;
+        if (validatedFields.success) {
+          const { email, password } = validatedFields.data;
 
-    //       const user = await getUserByEmail(email);
+          const user = await getUserByEmail(email);
 
-    //       if (!user || !user.password) return null;
+          if (!user || !user.password) return null;
 
-    //       const passwordMatch = await bcrypt.compare(password, user.password);
+          const passwordMatch = await bcrypt.compare(password, user.password);
 
-    //       if (passwordMatch) return user;
-    //     }
+          if (passwordMatch) return user;
+        }
 
-    //     return null;
-    //   },
-    // }),
+        return null;
+      },
+    }),
   ],
+  trustHost: true,
 } satisfies NextAuthConfig;
