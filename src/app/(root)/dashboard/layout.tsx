@@ -8,12 +8,15 @@ const layout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <div className="min-h-screen bg-gray-900 flex">
-      <DashboardSidebar />
+    <div className="min-h-screen bg-gray-900 flex flex-col md:flex-row">
+      {/* Sidebar - hide on small screens, show toggle if needed */}
+      <div className="md:block hidden">
+        <DashboardSidebar />
+      </div>
 
       <div className="flex-1 flex flex-col">
         <DashboardUpper />
-        <main className="flex-1 p-6 overflow-auto">{children}</main>
+        <main className="flex-1 p-4 md:p-6 overflow-auto">{children}</main>
       </div>
     </div>
   );
