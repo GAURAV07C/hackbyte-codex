@@ -60,7 +60,7 @@ const DashboardSidebar = () => {
       <div className="p-6 border-b border-gray-700">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-             <Image src={"/logo.png"} alt="logo" width={90} height={90} />
+             <Image src={"/fav.png"} alt="logo" width={90} height={90} />
           </div>
           <div>
             <span className="text-xl font-bold text-white">
