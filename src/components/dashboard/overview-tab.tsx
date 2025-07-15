@@ -1,21 +1,9 @@
 "use client"
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import {
-  Calendar,
-  Clock,
-  Play,
-  TrendingUp,
-  Award,
-  Video,
-} from "lucide-react"
+import { Calendar, Clock, Play, TrendingUp, Award, Video } from "lucide-react"
 import { motion } from "framer-motion"
 
 export function OverviewTab() {
@@ -74,7 +62,7 @@ export function OverviewTab() {
   return (
     <div className="space-y-6">
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => {
           const Icon = stat.icon
           return (
@@ -85,13 +73,13 @@ export function OverviewTab() {
               transition={{ delay: index * 0.1 }}
             >
               <Card className="bg-gray-800 border-gray-700">
-                <CardContent className="p-5 sm:p-6">
+                <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-400 text-sm">{stat.title}</p>
                       <p className="text-2xl font-bold text-white">{stat.value}</p>
                     </div>
-                    <Icon className={`h-7 w-7 sm:h-8 sm:w-8 ${stat.color}`} />
+                    <Icon className={`h-8 w-8 ${stat.color}`} />
                   </div>
                 </CardContent>
               </Card>
@@ -100,8 +88,7 @@ export function OverviewTab() {
         })}
       </div>
 
-      {/* Webinars + Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid lg:grid-cols-2 gap-6">
         {/* Upcoming Webinars */}
         <Card className="bg-gray-800 border-gray-700">
           <CardHeader>
@@ -112,22 +99,19 @@ export function OverviewTab() {
           </CardHeader>
           <CardContent className="space-y-4">
             {upcomingWebinars.map((webinar) => (
-              <div
-                key={webinar.id}
-                className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 bg-gray-700 rounded-lg gap-4"
-              >
+              <div key={webinar.id} className="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
                 <div className="flex-1">
-                  <div className="flex items-center flex-wrap space-x-2 mb-2">
+                  <div className="flex items-center space-x-2 mb-2">
                     <h4 className="font-semibold text-white">{webinar.title}</h4>
                     {webinar.status === "live" && (
-                      <Badge className="bg-red-600 text-white flex items-center">
+                      <Badge className="bg-red-600 text-white">
                         <div className="w-2 h-2 bg-white rounded-full mr-1 animate-pulse" />
                         LIVE
                       </Badge>
                     )}
                   </div>
                   <p className="text-gray-400 text-sm">by {webinar.instructor}</p>
-                  <div className="flex flex-wrap items-center gap-2 mt-2 text-xs text-gray-400">
+                  <div className="flex items-center space-x-4 mt-2 text-xs text-gray-400">
                     <span>
                       {webinar.date} at {webinar.time}
                     </span>
@@ -136,9 +120,9 @@ export function OverviewTab() {
                 </div>
                 <Button
                   size="sm"
-                  className={`w-full sm:w-auto ${
+                  className={
                     webinar.status === "live" ? "bg-red-600 hover:bg-red-700" : "bg-blue-600 hover:bg-blue-700"
-                  }`}
+                  }
                 >
                   {webinar.status === "live" ? (
                     <>
@@ -164,17 +148,14 @@ export function OverviewTab() {
           </CardHeader>
           <CardContent className="space-y-4">
             {recentActivity.map((activity) => (
-              <div
-                key={activity.id}
-                className="flex items-start gap-3 p-3 bg-gray-700 rounded-lg"
-              >
+              <div key={activity.id} className="flex items-center space-x-3 p-3 bg-gray-700 rounded-lg">
                 <div
-                  className={`w-2 h-2 mt-1 rounded-full ${
+                  className={`w-2 h-2 rounded-full ${
                     activity.type === "completion"
                       ? "bg-green-400"
                       : activity.type === "join"
-                      ? "bg-blue-400"
-                      : "bg-purple-400"
+                        ? "bg-blue-400"
+                        : "bg-purple-400"
                   }`}
                 />
                 <div className="flex-1">
