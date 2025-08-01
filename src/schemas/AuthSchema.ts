@@ -17,6 +17,7 @@ export const RegisterSchema = z
     name: z.string().min(1, {
       message: "Name is required",
     }),
+    role: z.enum(["USER", "ADMIN", "LEAD"]).optional(),
     password: z.string().min(6, {
       message: "Minimum 6 character required",
     }),

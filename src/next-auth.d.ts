@@ -3,6 +3,7 @@ import { type DefaultSession } from "next-auth";
 export type ExtendedUser = DefaultSession["user"] & {
   userName: string;
   id: string;
+  role:string;
  
 };
 
@@ -16,5 +17,6 @@ declare module "@auth/core/jwt" {
   interface JWT {
     userName?: string;
     id?:string;
+    role?:string;
   }
 }

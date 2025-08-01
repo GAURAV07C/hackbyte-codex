@@ -20,12 +20,20 @@ enum WebniarStatus {
   CANCELED
 }
 
+enum Role {
+  ADMIN
+  USER
+  LEAD
+}
 model User {
   id              String            @id @default(cuid())
   name            String?
   email           String?           @unique
   userName        String?           @unique
   image           String?
+  role             Role?   @default(USER)
+  collegeName      String?
+
   password        String?
   createdAt       DateTime          @default(now())
   emailVerified   DateTime?

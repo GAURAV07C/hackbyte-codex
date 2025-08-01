@@ -60,6 +60,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.userName = token.userName;
       }
 
+      if(token.role && session.user) {
+        session.user.role = token.role;
+      }
+
       return session;
     },
 
@@ -72,6 +76,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       if (existingUser.userName !== null) {
         token.userName = existingUser.userName;
+      }
+
+      if(existingUser.role !== null){
+        token.role = existingUser.role;
       }
 
 

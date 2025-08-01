@@ -9,19 +9,21 @@ import {
 } from "@/lib/routes";
 
 const { auth } = NextAuth(authconfig);
-
+console.log(auth.name);
 export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
 
+   const role = req.auth?.user?.role;
+
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
 
- const isPublicRoute =
-   publicRouts.includes(nextUrl.pathname) ||
-   /^\/[^\/]+$/.test(nextUrl.pathname);
+  const isPublicRoute =
+    publicRouts.includes(nextUrl.pathname) ||
+    /^\/[^\/]+$/.test(nextUrl.pathname);
 
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-  console.log(nextUrl.pathname)
+  console.log(nextUrl.pathname);
 
   if (isApiAuthRoute) {
     return;
@@ -43,6 +45,10 @@ export default auth((req) => {
   if (isLoggedIn && nextUrl.pathname === "/") {
     return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
   }
+
+   if (nextUrl.pathname.startsWith("/admin") && role !== "ADMIN") {
+     return Response.redirect(new URL("/dashboard", req.url));
+   }
 
   return;
 });
