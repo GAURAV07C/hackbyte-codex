@@ -32,7 +32,12 @@ model User {
   userName        String?           @unique
   image           String?
   role             Role?   @default(USER)
+  linkedin   String?
   collegeName      String?
+  collegeLocation String?
+  designation  String?
+  currentYear  String?
+  Bio             String?
 
   password        String?
   createdAt       DateTime          @default(now())

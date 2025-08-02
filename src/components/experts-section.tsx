@@ -1,12 +1,30 @@
-import { Linkedin, Award, MapPin, Building } from "lucide-react";
+import { Linkedin,  MapPin, Building } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { siteData } from "@/data/site-data";
 import { motion } from "framer-motion";
+import { getAllCampusLead } from "@/data/user";
+import { useEffect, useState } from "react";
 
 export function ExpertsSection() {
+  interface campusLeadData {
+
+    id: string;
+    name: string;
+    image: string;
+    linkedin: string;
+    collegeLocation: string;
+    college: string;
+    designation: string;
+    currentYear: string;
+    Bio: string;
+  }
+
+  const [experts, setExperts] = useState<campusLeadData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -30,6 +48,58 @@ export function ExpertsSection() {
     },
   };
 
+  useEffect(() => {
+    async function fetchCampusLead() {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const campusLead = await getAllCampusLead();
+      
+
+        if (campusLead.sucess) {
+          type CampusLeadItem = {
+            id?: string;
+            name?: string;
+            image?: string;
+            linkedin?: string;
+            collegeLocation?: string;
+            collegeName?: string;
+            designation?: string;
+            currentYear?: string;
+            Bio?: string;
+          };
+
+          setExperts(
+            (campusLead.data as CampusLeadItem[]).map((item) => ({
+              id: item.id ?? "",
+              name: item.name ?? "",
+              image: item.image ?? "/placeholder.svg",
+              linkedin: item.linkedin ?? "",
+              collegeLocation: item.collegeLocation ?? "",
+              college: item.collegeName ?? "",
+              designation: item.designation ?? "",
+              currentYear: item.currentYear ?? "",
+              Bio: item.Bio ?? "",
+            }))
+          );
+        } else {
+          setError("No data found.");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError("Failed to fetch campus leads.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchCampusLead();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+
   return (
     <section id="experts" className="py-24 bg-gray-900">
       <div className="container mx-auto px-6">
@@ -41,11 +111,11 @@ export function ExpertsSection() {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 md:mb-8">
-            Club of <span className="text-[#5ac8a0]">HackByCodex</span>{" "}
+            Club of <span className="text-[#5ac8a0]">HackByCodex</span>
           </h2>
           <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto px-4">
-            Meet Our Campus Lead — the driving force behind HackByCodex&lsquo;s vision
-            and growth.
+            Meet Our Campus Lead — the driving force behind HackByCodex&lsquo;s
+            vision and growth.
           </p>
         </motion.div>
 
@@ -56,9 +126,9 @@ export function ExpertsSection() {
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {siteData.experts.map((expert, index) => (
+          {experts.map((expert) => (
             <motion.div
-              key={index}
+              key={expert.id}
               variants={cardVariants}
               whileHover={{ y: -10, scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300 }}
@@ -104,32 +174,26 @@ export function ExpertsSection() {
                       {expert.name}
                     </h3>
                     <p className="text-base md:text-lg font-semibold text-gray-300 mb-1">
-                      {expert.title}
+                      {expert.designation}
                     </p>
                     <p className="text-blue-400 font-medium mb-3 md:mb-4 text-sm md:text-base">
-                      {expert.specialization}
+                      {expert.college}
                     </p>
 
                     <div className="space-y-1 md:space-y-2 text-xs md:text-sm text-gray-400 mb-4">
                       <div className="flex items-center justify-center">
                         <Building className="h-3 md:h-4 w-3 md:w-4 mr-2" />
-                        <span>{expert.company}</span>
+                        <span>{expert.college}</span>
                       </div>
                       <div className="flex items-center justify-center">
                         <MapPin className="h-3 md:h-4 w-3 md:w-4 mr-2" />
-                        <span>{expert.location}</span>
-                      </div>
-                      <div className="flex items-center justify-center">
-                        <Award className="h-3 md:h-4 w-3 md:w-4 mr-2" />
-                        <span>{expert.experience}</span>
+                        <span>{expert.collegeLocation}</span>
                       </div>
                     </div>
                   </div>
 
                   <div className="mt-auto pt-3 md:pt-4 border-t border-gray-700">
-                    <p className="text-xs text-gray-400">
-                      {expert.achievements}
-                    </p>
+                    <p className="text-xs text-gray-400">{expert.Bio}</p>
                   </div>
                 </CardContent>
               </Card>

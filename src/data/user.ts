@@ -100,9 +100,23 @@ export const getAllUsers = async () => {
   }
 }
 
+export const getAllCampusLead = async () => {
+  try {
 
+    const user = await prisma.user.findMany({
+      where: {
+        role:"LEAD"
+      }
 
+    })
 
+    return {sucess:true, data:user}
+
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "Something went wrong!" };
+    }
+}
 
 export async function updateProfile(formData: FormData, userId: string) {
   try {
