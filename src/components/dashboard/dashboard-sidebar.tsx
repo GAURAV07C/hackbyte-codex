@@ -9,6 +9,7 @@ import {
   Star,
   User,
   Video,
+  PersonStandingIcon,
 } from "lucide-react";
 import React from "react";
 import { useSession, signOut } from "next-auth/react";
@@ -39,6 +40,16 @@ const DashboardSidebar = () => {
       icon: BookOpen,
       link: "/dashboard/my-webinars",
     },
+    ...(user?.role === "lead"
+      ? [
+          {
+            id: "campusLead",
+            label: "Campus Lead",
+            icon: PersonStandingIcon,
+            link: "/dashboard/campusLead",
+          },
+        ]
+      : []),
     {
       id: "certificates",
       label: "Certificates",
@@ -60,7 +71,7 @@ const DashboardSidebar = () => {
       <div className="p-6 border-b border-gray-700">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-             <Image src={"/fav.png"} alt="logo" width={90} height={90} />
+            <Image src={"/fav.png"} alt="logo" width={90} height={90} />
           </div>
           <div>
             <span className="text-xl font-bold text-white">

@@ -55,6 +55,17 @@ export const getUserById = async (id: string) => {
         image: true,
         userName: true,
         role:true,
+        Bio:true,
+        company:true,
+         linkedin:true,
+         location:true,
+          phone:true,
+          collegeLocation:true,
+          collegeName:true,
+          currentYear:true,
+          designation:true,
+          website:true,
+  
 
         email: true,
         emailVerified: true,

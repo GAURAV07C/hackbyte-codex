@@ -34,10 +34,14 @@ model User {
   role             Role?   @default(USER)
   linkedin   String?
   collegeName      String?
+  website    String?
+  company String?
+  phone   String?
   collegeLocation String?
   designation  String?
   currentYear  String?
   Bio             String?
+  location        String?
 
   password        String?
   createdAt       DateTime          @default(now())

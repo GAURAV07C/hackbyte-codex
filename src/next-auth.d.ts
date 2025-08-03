@@ -18,5 +18,7 @@ declare module "@auth/core/jwt" {
     userName?: string;
     id?:string;
     role?:string;
+    
+
   }
 }
