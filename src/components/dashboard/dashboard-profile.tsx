@@ -66,7 +66,7 @@ const Profile = () => {
       if (!userId) return;
       const responce = await getUserById(userId);
 
-      console.log(responce);
+     
       if (responce) {
         setUser(responce);
       }
@@ -102,21 +102,21 @@ const Profile = () => {
        console.error("User ID is missing");
        return;
      }
-     console.log("Saving user data:", formData);
+    //  console.log("Saving user data:", formData);
      await ProfileUpdate(formData,userId); // 🔧 Send to backend
      setIsEditing(false);
             toast({
               title: "Success",
               description: "Profile Updated Successfully",
             });
-     console.log("Profile updated successfully!");
+   
    } catch (error) {
-     console.error("Failed to update profile:", error);
+     
      // toast.error("Failed to update profile."); // Optional toast
      toast({
       title: "Error",
-      description: "Failed to update profile",
-      
+      description: `Failed to update profile ${error}`,
+
      })
    }
  };
@@ -139,6 +139,8 @@ const Profile = () => {
     });
     setIsEditing(false);
   };
+
+  console.log(user)
 
   const yearOptions = [
     "1st Year",
