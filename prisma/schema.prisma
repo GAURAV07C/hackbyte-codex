@@ -34,6 +34,8 @@ model User {
   role             Role?   @default(USER)
   linkedin   String?
   collegeName      String?
+  Collegeimage   String?
+  lastMonthIncentive  String? @default("0")
   website    String?
   company String?
   phone   String?

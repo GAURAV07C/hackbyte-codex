@@ -11,8 +11,6 @@ import { SignupDialog } from "./auth/signup-dialog";
 export function HeroSection() {
   // const { user } = useAuth();
 
-  const user: never[] = [];
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -30,13 +28,6 @@ export function HeroSection() {
       y: 0,
       opacity: 1,
     },
-  };
-
-
-
-  const handleWatchPreview = () => {
-    // Open preview video or demo
-    alert("Opening preview video...");
   };
 
   return (
@@ -98,7 +89,7 @@ export function HeroSection() {
 
           {/* Next Webinar Info */}
           <motion.div variants={itemVariants}>
-            <Card className="bg-gray-800 border border-gray-700 mb-8 md:mb-12 max-w-2xl mx-auto">
+            <Card className="bg-gradient-to-br from-slate-900 mb-8 md:mb-12 max-w-2xl mx-auto">
               <CardContent className="p-4 md:p-6">
                 <div className="flex items-center justify-center mb-3 md:mb-4">
                   <Calendar className="w-4 md:w-5 h-4 md:h-5 text-blue-400 mr-2" />
@@ -128,41 +119,36 @@ export function HeroSection() {
             variants={itemVariants}
             className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center mb-12 md:mb-20 px-4"
           >
-           
-              <SignupDialog>
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Button
-                    size="lg"
-                    className="bg-blue-600 hover:bg-blue-700 text-white text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 font-semibold w-full sm:w-auto"
-                  >
-                    Join Live Now
-                    <ArrowRight className="ml-2 h-4 md:h-5 w-4 md:w-5" />
-                  </Button>
-                </motion.div>
-              </SignupDialog>
-           
-             <SignupDialog>
-
-
-             
-
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-2 border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 font-semibold bg-transparent w-full sm:w-auto"
-              
+            <SignupDialog>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <Play className="w-4 md:w-5 h-4 md:h-5 mr-2" />
-                Watch Preview
-              </Button>
-            </motion.div>
+                <Button
+                  size="lg"
+                  className="bg-blue-600 hover:bg-blue-700 text-white text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 font-semibold w-full sm:w-auto"
+                >
+                  Join Live Now
+                  <ArrowRight className="ml-2 h-4 md:h-5 w-4 md:w-5" />
+                </Button>
+              </motion.div>
             </SignupDialog>
 
-
+            <SignupDialog>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="border-2 border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 font-semibold bg-transparent w-full sm:w-auto"
+                >
+                  <Play className="w-4 md:w-5 h-4 md:h-5 mr-2" />
+                  Watch Preview
+                </Button>
+              </motion.div>
+            </SignupDialog>
           </motion.div>
 
           {/* Stats */}
